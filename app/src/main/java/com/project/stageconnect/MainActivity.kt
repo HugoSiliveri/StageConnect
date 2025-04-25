@@ -43,6 +43,7 @@ fun AppNavigation() {
     val (startDestination, setStartDestination) = remember { mutableStateOf("home") }
     val isUserLoaded = remember { mutableStateOf(false) }
 
+    userViewModel.signOut()
     LaunchedEffect(Unit) {
         userViewModel.loadCurrentUser { user ->
             if (user != null) {
@@ -61,15 +62,16 @@ fun AppNavigation() {
         ) {
             CircularProgressIndicator()
         }
-    }
-    else {
+    } else {
         NavHost(navController = navController, startDestination = startDestination) {
             composable("login") {
                 LoginScreen(
                     viewModel = LoginViewModel(),
                     onLoginSuccess = {
-                        navController.navigate("home") {
-                            popUpTo("login") { inclusive = true }
+                        userViewModel.loadCurrentUser {
+                            navController.navigate("home") {
+                                popUpTo("login") { inclusive = true }
+                            }
                         }
                     },
                     onSignUpClick = { navController.navigate("signup") }
