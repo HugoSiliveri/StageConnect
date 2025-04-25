@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "985268358727",
+    "project_id": "stageconnect-141f4",
+    "storage_bucket": "stageconnect-141f4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:985268358727:android:f7c873c33791598a5f2b62",
+        "android_client_info": {
+          "package_name": "com.project.stageconnect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuSULxekooX9T1rbSeGc3-wt5UQu9V0NU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

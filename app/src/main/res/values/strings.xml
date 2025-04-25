@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name" translatable="false">StageConnect</string>
+    <string name="title_activity_login" translatable="false">LoginActivity</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="auth_log_in_text">Log in</string>
+    <string name="intern">Intern</string>
+    <string name="company">Company</string>
+    <string name="educational_institution">Educational institution</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
+    <string name="address">Address</string>
+    <string name="password">Password</string>
+    <string name="name">Name</string>
+    <string name="user_type">User type</string>
+    <string name="error_message">Error:</string>
+    <string name="account_created">Account created with success</string>
+    <string name="connexion_successful">Connexion successful</string>
+    <string name="offers">Offers</string>
+    <string name="candidatures">Candidatures</string>
+    <string name="account">Account</string>
+    <string name="students">Students</string>
+    <string name="internship">Internship</string>
+    <string name="messages">Messages</string>
+</resources>

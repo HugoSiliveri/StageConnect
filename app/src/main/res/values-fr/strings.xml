@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="invalid_username">Nom d\'utilisateur invalide</string>
+    <string name="invalid_password">Le mot de passe doit >5 caractères</string>
+    <string name="login_failed">Connexion échouée</string>
+    <string name="auth_log_in_text">Connexion</string>
+    <string name="action_sign_in">Se connecter</string>
+    <string name="action_sign_in_short">S\'inscrire</string>
+    <string name="welcome">Bienvenue !</string>
+    <string name="intern">Stagiaire</string>
+    <string name="company">Entreprise</string>
+    <string name="educational_institution">Établissement de formation</string>
+    <string name="first_name">Prénom</string>
+    <string name="last_name">Nom</string>
+    <string name="email">Email</string>
+    <string name="phone">Téléphone</string>
+    <string name="address">Adresse</string>
+    <string name="password">Mot de passe</string>
+    <string name="name">Nom</string>
+    <string name="user_type">Type d\'utilisateur</string>
+    <string name="error_message">Erreur:</string>
+    <string name="account_created">Compte créé avec succès</string>
+    <string name="connexion_successful">Connexion réussite</string>
+    <string name="offers">Offres</string>
+    <string name="candidatures">Candidatures</string>
+    <string name="account">Compte</string>
+    <string name="students">Étudiants</string>
+    <string name="internship">Stage</string>
+    <string name="messages">Messagerie</string>
+</resources>
