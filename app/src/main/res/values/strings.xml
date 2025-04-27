@@ -28,4 +28,6 @@
     <string name="students">Students</string>
     <string name="internship">Internship</string>
     <string name="messages">Messages</string>
+    <string name="search">Search</string>
+    <string name="no_offers_found">No offers found</string>
 </resources>

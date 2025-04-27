@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -62,12 +63,14 @@ fun CompanyScreen() {
         NavHost(
             navController = navController,
             startDestination = BottomNavItem.Offers.route,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier
+                .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+                .padding(innerPadding)
         ) {
             composable(BottomNavItem.Offers.route) { OffersScreen() }
             composable(BottomNavItem.Candidatures.route) { CandidaturesScreen() }
             composable(BottomNavItem.Messages.route) { MessagesScreen() }
-            composable(BottomNavItem.Account.route) { OffersScreen() }
+            composable(BottomNavItem.Account.route) { AccountScreen() }
         }
     }
 }

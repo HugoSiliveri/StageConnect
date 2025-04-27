@@ -32,7 +32,9 @@ class UserViewModel : ViewModel() {
         }
     }
 
-    fun getCurrentUser(): User? = currentUser
+    fun getCurrentUser(): User? {
+        return currentUser
+    }
 
     fun signOut() {
         auth.signOut()

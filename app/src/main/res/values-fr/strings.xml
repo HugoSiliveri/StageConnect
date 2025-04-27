@@ -27,4 +27,6 @@
     <string name="students">Étudiants</string>
     <string name="internship">Stage</string>
     <string name="messages">Messagerie</string>
+    <string name="search">Search</string>
+    <string name="no_offers_found">No offers found</string>
 </resources>

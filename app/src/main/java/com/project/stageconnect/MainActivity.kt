@@ -43,7 +43,6 @@ fun AppNavigation() {
     val (startDestination, setStartDestination) = remember { mutableStateOf("home") }
     val isUserLoaded = remember { mutableStateOf(false) }
 
-    userViewModel.signOut()
     LaunchedEffect(Unit) {
         userViewModel.loadCurrentUser { user ->
             if (user != null) {
