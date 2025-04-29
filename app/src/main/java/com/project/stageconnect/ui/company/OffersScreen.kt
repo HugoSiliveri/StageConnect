@@ -3,7 +3,6 @@ package com.project.stageconnect.ui.company
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,16 +25,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.project.stageconnect.R
-import com.project.stageconnect.model.InternshipViewModel
+import com.project.stageconnect.viewmodel.InternshipViewModel
+import com.project.stageconnect.model.User
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OffersScreen() {
+fun OffersScreen(currentUser: User) {
     var searchQuery by remember { mutableStateOf("") }
     var isActive by remember { mutableStateOf(false) }
     val internshipViewModel: InternshipViewModel = viewModel()
 
-    val offers = remember { internshipViewModel.getOffers() }
+    val offers = remember { internshipViewModel.getCompanyOffers(currentUser.structname) }
 
     val filteredOffers = offers.filter { offer ->
         searchQuery.isBlank() || listOf(

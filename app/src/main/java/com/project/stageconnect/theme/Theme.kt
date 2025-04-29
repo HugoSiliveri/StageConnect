@@ -1,4 +1,4 @@
-package com.project.stageconnect.ui.theme
+package com.project.stageconnect.theme
 
 import android.app.Activity
 import android.os.Build

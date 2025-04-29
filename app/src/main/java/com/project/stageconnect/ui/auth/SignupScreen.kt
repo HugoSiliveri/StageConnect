@@ -15,7 +15,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.project.stageconnect.R
-import com.project.stageconnect.ui.theme.StageConnectTheme
+import com.project.stageconnect.theme.StageConnectTheme
+import com.project.stageconnect.viewmodel.SignupViewModel
 
 @Composable
 fun SignupScreen(viewModel: SignupViewModel, onSignupSuccess: () -> Unit, onLoginClick: () -> Unit) {

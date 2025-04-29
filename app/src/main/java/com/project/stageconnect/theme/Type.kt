@@ -1,4 +1,4 @@
-package com.project.stageconnect.ui.theme
+package com.project.stageconnect.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

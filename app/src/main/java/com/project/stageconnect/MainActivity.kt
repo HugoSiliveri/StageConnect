@@ -19,11 +19,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.project.stageconnect.ui.auth.LoginScreen
-import com.project.stageconnect.ui.auth.LoginViewModel
+import com.project.stageconnect.viewmodel.LoginViewModel
 import com.project.stageconnect.ui.auth.SignupScreen
-import com.project.stageconnect.ui.auth.SignupViewModel
+import com.project.stageconnect.viewmodel.SignupViewModel
 import com.project.stageconnect.ui.company.CompanyScreen
-import com.project.stageconnect.model.UserViewModel
+import com.project.stageconnect.viewmodel.UserViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,7 +87,7 @@ fun AppNavigation() {
                 val currentUser = userViewModel.getCurrentUser()
                 when (currentUser?.type) {
                     "intern" -> Text("Internview") // TODO: Remplacer par la vue pour les étudiants
-                    "company" -> CompanyScreen()
+                    "company" -> CompanyScreen(currentUser)
                     "educational" -> Text("Educational view") // TODO: Remplacer par la vue pour les établissements
                 }
             }

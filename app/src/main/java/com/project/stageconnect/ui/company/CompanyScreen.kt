@@ -17,9 +17,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.project.stageconnect.R
+import com.project.stageconnect.model.User
 
 @Composable
-fun CompanyScreen() {
+fun CompanyScreen(currentUser: User) {
     val navController = rememberNavController()
     val items = listOf(
         BottomNavItem.Offers,
@@ -67,7 +68,7 @@ fun CompanyScreen() {
                 .padding(start = 16.dp, end = 16.dp, top = 16.dp)
                 .padding(innerPadding)
         ) {
-            composable(BottomNavItem.Offers.route) { OffersScreen() }
+            composable(BottomNavItem.Offers.route) { OffersScreen(currentUser) }
             composable(BottomNavItem.Candidatures.route) { CandidaturesScreen() }
             composable(BottomNavItem.Messages.route) { MessagesScreen() }
             composable(BottomNavItem.Account.route) { AccountScreen() }

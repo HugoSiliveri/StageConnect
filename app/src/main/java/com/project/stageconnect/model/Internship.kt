@@ -1,7 +1,5 @@
 package com.project.stageconnect.model
 
-import kotlin.time.Duration
-
 data class Internship(
     val title: String,
     val company: String,
