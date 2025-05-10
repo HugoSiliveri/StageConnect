@@ -29,4 +29,11 @@
     <string name="messages">Messagerie</string>
     <string name="search">Search</string>
     <string name="no_offers_found">No offers found</string>
+    <string name="add_new_offer">Add new offer</string>
+    <string name="create_offer">Create Offer</string>
+    <string name="offer_created_successfully">Offer created successfully</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="location">Location</string>
+    <string name="duration">Duration</string>
 </resources>

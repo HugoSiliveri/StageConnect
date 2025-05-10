@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.project.stageconnect.R
+import com.project.stageconnect.model.DataResult
 import com.project.stageconnect.theme.StageConnectTheme
 import com.project.stageconnect.viewmodel.SignupViewModel
 
@@ -239,20 +240,20 @@ fun SignupScreen(viewModel: SignupViewModel, onSignupSuccess: () -> Unit, onLogi
                         }
                         viewModel.signup(typeKey, email, password, firstname, lastname, name, phone, address)
                     },
-                    enabled = signupState != SignupResult.Loading
+                    enabled = signupState != DataResult.Loading
                 ) {
                     Text(stringResource(R.string.action_sign_in_short))
                 }
 
-                if (signupState is SignupResult.Error) {
+                if (signupState is DataResult.Error) {
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    LaunchedEffect((signupState as SignupResult.Error).message) {
-                        Toast.makeText(context, context.getString(R.string.error_message) + (signupState as SignupResult.Error).message, Toast.LENGTH_SHORT).show()
+                    LaunchedEffect((signupState as DataResult.Error).message) {
+                        Toast.makeText(context, context.getString(R.string.error_message) + (signupState as DataResult.Error).message, Toast.LENGTH_SHORT).show()
                     }
                 }
 
-                if (signupState == SignupResult.Success) {
+                if (signupState == DataResult.Success) {
                     LaunchedEffect(Unit) {
                         Toast.makeText(context, context.getString(R.string.account_created) , Toast.LENGTH_SHORT).show()
                         onSignupSuccess()

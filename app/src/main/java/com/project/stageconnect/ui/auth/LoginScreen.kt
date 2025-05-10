@@ -16,6 +16,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.project.stageconnect.R
+import com.project.stageconnect.model.DataResult
 import com.project.stageconnect.theme.StageConnectTheme
 import com.project.stageconnect.viewmodel.LoginViewModel
 
@@ -106,20 +107,20 @@ fun LoginScreen(viewModel: LoginViewModel, onLoginSuccess: () -> Unit, onSignUpC
 
                 Button(
                     onClick = { viewModel.login(email, password) },
-                    enabled = loginState != LoginResult.Loading
+                    enabled = loginState != DataResult.Loading
                 ) {
                     Text(stringResource(R.string.auth_log_in_text))
                 }
 
-                if (loginState is LoginResult.Error) {
+                if (loginState is DataResult.Error) {
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    LaunchedEffect((loginState as LoginResult.Error).message) {
-                        Toast.makeText(context, context.getString(R.string.error_message) + (loginState as LoginResult.Error).message, Toast.LENGTH_SHORT).show()
+                    LaunchedEffect((loginState as DataResult.Error).message) {
+                        Toast.makeText(context, context.getString(R.string.error_message) + (loginState as DataResult.Error).message, Toast.LENGTH_SHORT).show()
                     }
                 }
 
-                if (loginState == LoginResult.Success) {
+                if (loginState == DataResult.Success) {
                     LaunchedEffect(Unit) {
                         Toast.makeText(context, context.getString(R.string.connexion_successful) , Toast.LENGTH_SHORT).show()
                         onLoginSuccess()

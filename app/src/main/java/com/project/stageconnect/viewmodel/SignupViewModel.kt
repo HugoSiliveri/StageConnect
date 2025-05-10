@@ -2,11 +2,8 @@ package com.project.stageconnect.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.project.stageconnect.model.DataResult
 import com.project.stageconnect.model.repository.AuthRepository
-import com.project.stageconnect.ui.auth.SignupResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -14,8 +11,8 @@ import kotlinx.coroutines.launch
 class SignupViewModel : ViewModel() {
 
     private val authRepository: AuthRepository = AuthRepository()
-    private val _signupState = MutableStateFlow<SignupResult>(SignupResult.Idle)
-    val signupState: StateFlow<SignupResult> = _signupState
+    private val _signupState = MutableStateFlow<DataResult>(DataResult.Idle)
+    val signupState: StateFlow<DataResult> = _signupState
 
     fun signup(
         typeKey: String,
@@ -28,7 +25,7 @@ class SignupViewModel : ViewModel() {
         address: String
     ) {
         viewModelScope.launch {
-            _signupState.value = SignupResult.Loading
+            _signupState.value = DataResult.Loading
             val result = authRepository.signupUser(
                 typeKey,
                 email,
@@ -40,9 +37,9 @@ class SignupViewModel : ViewModel() {
                 address
             )
             _signupState.value = if (result.isSuccess) {
-                SignupResult.Success
+                DataResult.Success
             } else {
-                SignupResult.Error(result.exceptionOrNull()?.message ?: "Erreur inconnue")
+                DataResult.Error(result.exceptionOrNull()?.message ?: "Erreur inconnue")
             }
         }
     }

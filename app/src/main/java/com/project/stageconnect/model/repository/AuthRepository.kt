@@ -17,7 +17,7 @@ class AuthRepository {
         }
     }
 
-    suspend fun signupUser(
+     suspend fun signupUser(
         typeKey: String,
         email: String,
         password: String,

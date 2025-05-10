@@ -1,12 +1,12 @@
 package com.project.stageconnect.model
 
 data class User(
-    val uid: String = "",
-    val type: String = "",
-    val email: String = "",
-    val phone: String = "",
-    val address: String = "",
-    val firstname: String = "",
-    val lastname: String = "",
-    val structname: String = ""
+    var uid: String = "",
+    var type: String = "",
+    var email: String = "",
+    var phone: String = "",
+    var address: String = "",
+    var firstname: String = "",
+    var lastname: String = "",
+    var structname: String = ""
 )

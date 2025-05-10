@@ -17,6 +17,9 @@ class UserRepository {
         db.collection("users").document(uid).get()
             .addOnSuccessListener { document ->
                 val user = document.toObject(User::class.java)
+                if (user != null) {
+                    user.uid = document.id
+                }
                 onResult(user)
             }
             .addOnFailureListener {

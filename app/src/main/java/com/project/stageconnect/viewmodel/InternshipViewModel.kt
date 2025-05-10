@@ -1,21 +1,59 @@
 package com.project.stageconnect.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.project.stageconnect.model.DataResult
 import com.project.stageconnect.model.Internship
+import com.project.stageconnect.model.repository.InternshipRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 class InternshipViewModel : ViewModel() {
 
-    fun getOffers(): List<Internship> {
-        return listOf(
-            Internship("Développeur PHP", "Capgemini", "Capgemini est une société spécialisée dans le secteur de l’IA et de l’informatique quantique. Nous offrons des services pour accélérer la recherche et le développement de projets dans différents domaines comme les mathématiques, la physique ou encore la biologie.", "34000 Montpellier", "10 semaines"),
-            Internship("UX Designer", "Creatix", "Refonte d'une interface mobile...", "75000 Paris", "10 semaines"),
-            Internship("Data Analyst", "InData", "Analyse de données clients...", "13000 Marseille", "10 semaines")
-        )
+    private val internshipRepository = InternshipRepository()
+
+    private val _internships = MutableStateFlow<List<Internship>>(emptyList())
+    val internships: StateFlow<List<Internship>> = _internships
+
+    private val _internshipState = MutableStateFlow<DataResult>(DataResult.Idle)
+    val internshipState: StateFlow<DataResult> = _internshipState
+
+    fun loadInternships() {
+        internshipRepository.getInternships { list ->
+            _internships.value = list
+        }
     }
 
-    fun getCompanyOffers(company: String): List<Internship> {
-        return listOf(
-            Internship("Développeur PHP", "Capgemini", "Capgemini est une société spécialisée dans le secteur de l’IA et de l’informatique quantique. Nous offrons des services pour accélérer la recherche et le développement de projets dans différents domaines comme les mathématiques, la physique ou encore la biologie.", "34000 Montpellier", "10 semaines"),
-        )
+    fun loadCompanyInternships(companyId: String) {
+        internshipRepository.getCompanyInternships(companyId) { list ->
+            _internships.value = list
+        }
+    }
+
+    fun createInternship(
+        companyId: String,
+        companyName: String,
+        title: String,
+        description: String,
+        location: String,
+        duration: String
+    ) {
+        viewModelScope.launch {
+            _internshipState.value = DataResult.Loading
+            val result = internshipRepository.createInternship(
+                companyId,
+                companyName,
+                title,
+                description,
+                location,
+                duration
+            )
+            _internshipState.value = if (result.isSuccess) {
+                DataResult.Success
+            } else {
+                DataResult.Error(result.exceptionOrNull()?.message ?: "Erreur inconnue")
+            }
+        }
     }
 }

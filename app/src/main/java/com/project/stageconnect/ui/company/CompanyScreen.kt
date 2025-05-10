@@ -40,11 +40,7 @@ fun CompanyScreen(currentUser: User) {
                         selected = currentRoute == item.route,
                         onClick = {
                             if (currentRoute != item.route) {
-                                navController.navigate(item.route) {
-                                    popUpTo(navController.graph.startDestinationId) { saveState = true }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
+                                navController.navigate(item.route)
                             }
                         },
                         icon = {
@@ -68,10 +64,13 @@ fun CompanyScreen(currentUser: User) {
                 .padding(start = 16.dp, end = 16.dp, top = 16.dp)
                 .padding(innerPadding)
         ) {
-            composable(BottomNavItem.Offers.route) { OffersScreen(currentUser) }
+            composable(BottomNavItem.Offers.route) { OffersScreen(currentUser, navController) }
             composable(BottomNavItem.Candidatures.route) { CandidaturesScreen() }
             composable(BottomNavItem.Messages.route) { MessagesScreen() }
             composable(BottomNavItem.Account.route) { AccountScreen() }
+
+            // Routes non affichées dans la barre de navigation
+            composable("add_offer") { OfferCreationScreen(currentUser, navController) }
         }
     }
 }
