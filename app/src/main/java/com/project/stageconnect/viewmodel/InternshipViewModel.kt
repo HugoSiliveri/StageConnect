@@ -13,21 +13,24 @@ class InternshipViewModel : ViewModel() {
 
     private val internshipRepository = InternshipRepository()
 
-    private val _internships = MutableStateFlow<List<Internship>>(emptyList())
-    val internships: StateFlow<List<Internship>> = _internships
-
     private val _internshipState = MutableStateFlow<DataResult>(DataResult.Idle)
     val internshipState: StateFlow<DataResult> = _internshipState
 
-    fun loadInternships() {
+    fun loadInternships(onInternshipsLoaded: (List<Internship>) -> Unit) {
         internshipRepository.getInternships { list ->
-            _internships.value = list
+            onInternshipsLoaded(list)
         }
     }
 
-    fun loadCompanyInternships(companyId: String) {
+    fun loadCompanyInternships(onInternshipsLoaded: (List<Internship>) -> Unit, companyId: String) {
         internshipRepository.getCompanyInternships(companyId) { list ->
-            _internships.value = list
+            onInternshipsLoaded(list)
+        }
+    }
+
+    fun loadInternship(onInternshipLoaded: (Internship?) -> Unit, internshipId: String) {
+        internshipRepository.getInternship(internshipId) { internship ->
+            onInternshipLoaded(internship)
         }
     }
 

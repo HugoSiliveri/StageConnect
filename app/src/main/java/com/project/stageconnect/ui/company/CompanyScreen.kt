@@ -71,6 +71,7 @@ fun CompanyScreen(currentUser: User) {
 
             // Routes non affichées dans la barre de navigation
             composable("add_offer") { OfferCreationScreen(currentUser, navController) }
+            composable("offer_details/{offerId}") { OfferDetailsScreen(currentUser, navController, it.arguments?.getString("offerId")) }
         }
     }
 }

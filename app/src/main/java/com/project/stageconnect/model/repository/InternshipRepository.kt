@@ -26,6 +26,17 @@ class InternshipRepository {
             .addOnFailureListener { onResult(emptyList()) }
     }
 
+    fun getInternship(internshipId: String, onResult: (Internship?) -> Unit) {
+        db.collection("internships").document(internshipId).get()
+            .addOnSuccessListener { document ->
+                val internship = document.toObject(Internship::class.java)
+                onResult(internship)
+            }
+            .addOnFailureListener {
+                onResult(null)
+            }
+    }
+
     suspend fun createInternship(
         companyId: String,
         companyName: String,

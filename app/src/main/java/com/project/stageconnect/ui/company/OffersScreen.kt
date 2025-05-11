@@ -1,5 +1,6 @@
 package com.project.stageconnect.ui.company
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.project.stageconnect.R
+import com.project.stageconnect.model.Internship
 import com.project.stageconnect.viewmodel.InternshipViewModel
 import com.project.stageconnect.model.User
 import com.project.stageconnect.utils.Utils
@@ -41,11 +43,13 @@ fun OffersScreen(currentUser: User, navController: NavController) {
     var isActive by remember { mutableStateOf(false) }
     val internshipViewModel: InternshipViewModel = viewModel()
 
-    LaunchedEffect(Unit) {
-        internshipViewModel.loadCompanyInternships(currentUser.uid)
-    }
+    var offers by remember { mutableStateOf<List<Internship>>(emptyList()) }
 
-    val offers by internshipViewModel.internships.collectAsState()
+    LaunchedEffect(Unit) {
+        internshipViewModel.loadCompanyInternships({ list ->
+            offers = list
+        }, currentUser.uid)
+    }
 
     val filteredOffers = offers.filter { offer ->
         searchQuery.isBlank() || listOf(
@@ -97,7 +101,11 @@ fun OffersScreen(currentUser: User, navController: NavController) {
         } else {
             LazyColumn(modifier = Modifier.wrapContentHeight()) {
                 itemsIndexed(offers) { index, offer ->
-                    Column(modifier = Modifier.padding(vertical = 4.dp)) {
+                    Column(
+                        modifier = Modifier
+                            .padding(vertical = 4.dp)
+                            .clickable { navController.navigate("offer_details/${offer.id}") }
+                    ) {
                         if (index == 0) {
                             Spacer(modifier = Modifier.height(8.dp))
                         }
