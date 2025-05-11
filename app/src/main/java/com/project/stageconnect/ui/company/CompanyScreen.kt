@@ -12,16 +12,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.project.stageconnect.R
 import com.project.stageconnect.model.User
 
 @Composable
-fun CompanyScreen(currentUser: User) {
-    val navController = rememberNavController()
+fun CompanyScreen(currentUser: User, navController: NavHostController, onLogout: () -> Unit, OnUpdated: () -> Unit) {
     val items = listOf(
         BottomNavItem.Offers,
         BottomNavItem.Candidatures,
@@ -67,11 +66,11 @@ fun CompanyScreen(currentUser: User) {
             composable(BottomNavItem.Offers.route) { OffersScreen(currentUser, navController) }
             composable(BottomNavItem.Candidatures.route) { CandidaturesScreen() }
             composable(BottomNavItem.Messages.route) { MessagesScreen() }
-            composable(BottomNavItem.Account.route) { AccountScreen() }
+            composable(BottomNavItem.Account.route) { AccountScreen(currentUser, navController, onLogout) }
 
-            // Routes non affichées dans la barre de navigation
             composable("add_offer") { OfferCreationScreen(currentUser, navController) }
-            composable("offer_details/{offerId}") { OfferDetailsScreen(currentUser, navController, it.arguments?.getString("offerId")) }
+            composable("offer_details/{offerId}") { OfferDetailsScreen(navController, it.arguments?.getString("offerId")) }
+            composable("account_edition") { AccountEditionScreen(currentUser, navController, OnUpdated) }
         }
     }
 }

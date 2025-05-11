@@ -2,12 +2,10 @@ package com.project.stageconnect.ui.company
 
 import com.project.stageconnect.R
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Divider
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -27,12 +25,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.project.stageconnect.model.Internship
-import com.project.stageconnect.model.User
 import com.project.stageconnect.utils.Utils
 import com.project.stageconnect.viewmodel.InternshipViewModel
 
 @Composable
-fun OfferDetailsScreen(currentUser: User, navController: NavController, offerId: String?) {
+fun OfferDetailsScreen(navController: NavController, offerId: String?) {
 
     val internshipViewModel: InternshipViewModel = viewModel()
     var offer by remember { mutableStateOf<Internship?>(null) }

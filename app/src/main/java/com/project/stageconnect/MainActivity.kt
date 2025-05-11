@@ -1,5 +1,6 @@
 package com.project.stageconnect
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -35,12 +36,13 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@SuppressLint("ViewModelConstructorInComposable")
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
     val userViewModel: UserViewModel = viewModel()
 
-    val (startDestination, setStartDestination) = remember { mutableStateOf("home") }
+    val (startDestination, setStartDestination) = remember { mutableStateOf("login") }
     val isUserLoaded = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -84,11 +86,29 @@ fun AppNavigation() {
                 )
             }
             composable("home") {
-                val currentUser = userViewModel.getCurrentUser()
+                val currentUser = userViewModel.currentUser
                 when (currentUser?.type) {
-                    "intern" -> Text("Internview") // TODO: Remplacer par la vue pour les étudiants
-                    "company" -> CompanyScreen(currentUser)
-                    "educational" -> Text("Educational view") // TODO: Remplacer par la vue pour les établissements
+                    "intern" -> Text("Intern view") // TODO
+                    "company" -> {
+                        val companyNavController = rememberNavController()
+                        CompanyScreen(
+                            currentUser = currentUser,
+                            navController = companyNavController,
+                            onLogout = {
+                                navController.navigate("login") {
+                                    popUpTo("home") { inclusive = true }
+                                }
+                            },
+                            OnUpdated = {
+                                userViewModel.loadCurrentUser {
+                                    navController.navigate("home") {
+                                        popUpTo("login") { inclusive = true }
+                                    }
+                                }
+                            }
+                        )
+                    }
+                    "educational" -> Text("Educational view") // TODO
                 }
             }
         }

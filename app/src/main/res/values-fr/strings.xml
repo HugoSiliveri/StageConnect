@@ -36,4 +36,8 @@
     <string name="description">Description</string>
     <string name="location">Location</string>
     <string name="duration">Duration</string>
+    <string name="informations">Informations</string>
+    <string name="save_modifications">Save modifications</string>
+    <string name="account_updated_successfully">Account updated successfully</string>
+    <string name="disconnection_successful">Disconnection successful</string>
 </resources>

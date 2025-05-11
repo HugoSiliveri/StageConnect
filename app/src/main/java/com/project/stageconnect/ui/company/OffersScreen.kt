@@ -1,7 +1,9 @@
 package com.project.stageconnect.ui.company
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,7 +20,6 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.*
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,15 +33,19 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.project.stageconnect.R
 import com.project.stageconnect.model.Internship
-import com.project.stageconnect.viewmodel.InternshipViewModel
 import com.project.stageconnect.model.User
+import com.project.stageconnect.viewmodel.InternshipViewModel
 import com.project.stageconnect.utils.Utils
+import com.project.stageconnect.viewmodel.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OffersScreen(currentUser: User, navController: NavController) {
     var searchQuery by remember { mutableStateOf("") }
     var isActive by remember { mutableStateOf(false) }
+
+    val userViewModel: UserViewModel = viewModel()
+
     val internshipViewModel: InternshipViewModel = viewModel()
 
     var offers by remember { mutableStateOf<List<Internship>>(emptyList()) }

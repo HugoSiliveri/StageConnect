@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.project.stageconnect.model.User
+import kotlinx.coroutines.tasks.await
 
 class UserRepository {
     private val auth = FirebaseAuth.getInstance()
@@ -27,7 +28,40 @@ class UserRepository {
             }
     }
 
-    fun signOut() {
-        auth.signOut()
+    suspend fun editUser(
+        uid: String,
+        email: String,
+        phone: String,
+        address: String,
+        firstname: String,
+        lastname: String,
+        structname: String,
+        description: String,
+    ): Result<Unit> {
+        return try {
+            db.collection("users").document(uid).update(
+                mapOf(
+                    "email" to email,
+                    "phone" to phone,
+                    "address" to address,
+                    "firstname" to firstname,
+                    "lastname" to lastname,
+                    "structname" to structname,
+                    "description" to description
+                )
+            ).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    fun signOut(): Result<Unit> {
+        return try {
+            auth.signOut()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }

@@ -8,5 +8,6 @@ data class User(
     var address: String = "",
     var firstname: String = "",
     var lastname: String = "",
-    var structname: String = ""
+    var structname: String = "",
+    var description: String = ""
 )
