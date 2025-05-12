@@ -21,7 +21,7 @@ import com.project.stageconnect.model.User
 import com.project.stageconnect.viewmodel.InternshipViewModel
 
 @Composable
-fun OfferCreationScreen(currentUser: User, navController: NavController) {
+fun CompanyOfferCreationScreen(currentUser: User, navController: NavController) {
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var location by remember { mutableStateOf("") }

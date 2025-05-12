@@ -4,6 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.material3.*
 
 @Composable
-fun MessagesScreen() {
-    Text("Bienvenue sur la page de la messagerie")
+fun CompanyCandidaturesScreen() {
+    Text("Bienvenue sur la page des candidatures")
 }

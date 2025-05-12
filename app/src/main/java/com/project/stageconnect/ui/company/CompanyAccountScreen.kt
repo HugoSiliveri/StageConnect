@@ -32,7 +32,7 @@ import com.project.stageconnect.model.User
 import com.project.stageconnect.viewmodel.UserViewModel
 
 @Composable
-fun AccountScreen(currentUser: User, navController: NavController, onLogout: () -> Unit) {
+fun CompanyAccountScreen(currentUser: User, navController: NavController, onLogout: () -> Unit) {
 
     val userViewModel: UserViewModel = viewModel()
     val userState by userViewModel.userState.collectAsState()

@@ -24,6 +24,7 @@ import com.project.stageconnect.viewmodel.LoginViewModel
 import com.project.stageconnect.ui.auth.SignupScreen
 import com.project.stageconnect.viewmodel.SignupViewModel
 import com.project.stageconnect.ui.company.CompanyScreen
+import com.project.stageconnect.ui.educational.EducationalScreen
 import com.project.stageconnect.viewmodel.UserViewModel
 
 class MainActivity : ComponentActivity() {
@@ -108,7 +109,25 @@ fun AppNavigation() {
                             }
                         )
                     }
-                    "educational" -> Text("Educational view") // TODO
+                    "educational" -> {
+                        val educationalNavController = rememberNavController()
+                        EducationalScreen(
+                            currentUser = currentUser,
+                            navController = educationalNavController,
+                            onLogout = {
+                                navController.navigate("login") {
+                                    popUpTo("home") { inclusive = true }
+                                }
+                            },
+                            OnUpdated = {
+                                userViewModel.loadCurrentUser {
+                                    navController.navigate("home") {
+                                        popUpTo("login") { inclusive = true }
+                                    }
+                                }
+                            }
+                        )
+                    }
                 }
             }
         }

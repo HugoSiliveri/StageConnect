@@ -2,10 +2,8 @@ package com.project.stageconnect.ui.company
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -39,7 +37,7 @@ import com.project.stageconnect.model.User
 import com.project.stageconnect.viewmodel.UserViewModel
 
 @Composable
-fun AccountEditionScreen(currentUser: User, navController: NavController, onUpdated: () -> Unit) {
+fun CompanyAccountEditionScreen(currentUser: User, navController: NavController, onUpdated: () -> Unit) {
 
     val userViewModel: UserViewModel = viewModel()
     val userState by userViewModel.userState.collectAsState()

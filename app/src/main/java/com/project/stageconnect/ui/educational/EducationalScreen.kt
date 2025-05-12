@@ -1,4 +1,4 @@
-package com.project.stageconnect.ui.company
+package com.project.stageconnect.ui.educational
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -20,10 +20,9 @@ import com.project.stageconnect.R
 import com.project.stageconnect.model.User
 
 @Composable
-fun CompanyScreen(currentUser: User, navController: NavHostController, onLogout: () -> Unit, OnUpdated: () -> Unit) {
+fun EducationalScreen(currentUser: User, navController: NavHostController, onLogout: () -> Unit, OnUpdated: () -> Unit) {
     val items = listOf(
-        BottomNavItem.Offers,
-        BottomNavItem.Candidatures,
+        BottomNavItem.Students,
         BottomNavItem.Messages,
         BottomNavItem.Account
     )
@@ -58,26 +57,34 @@ fun CompanyScreen(currentUser: User, navController: NavHostController, onLogout:
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = BottomNavItem.Offers.route,
+            startDestination = BottomNavItem.Students.route,
             modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp, top = 16.dp)
                 .padding(innerPadding)
         ) {
-            composable(BottomNavItem.Offers.route) { CompanyOffersScreen(currentUser, navController) }
-            composable(BottomNavItem.Candidatures.route) { CompanyCandidaturesScreen() }
-            composable(BottomNavItem.Messages.route) { CompanyMessagesScreen() }
-            composable(BottomNavItem.Account.route) { CompanyAccountScreen(currentUser, navController, onLogout) }
+            composable(BottomNavItem.Students.route) { EducationalStudentsScreen(currentUser, navController) }
+            composable(BottomNavItem.Messages.route) { EducationalMessagesScreen() }
+            composable(BottomNavItem.Account.route) {
+                EducationalAccountScreen(
+                    currentUser,
+                    navController,
+                    onLogout
+                )
+            }
 
-            composable("add_offer") { CompanyOfferCreationScreen(currentUser, navController) }
-            composable("offer_details/{offerId}") { CompanyOfferDetailsScreen(navController, it.arguments?.getString("offerId")) }
-            composable("account_edition") { CompanyAccountEditionScreen(currentUser, navController, OnUpdated) }
+            composable("account_edition") {
+                EducationalAccountEditionScreen(
+                    currentUser,
+                    navController,
+                    OnUpdated
+                )
+            }
         }
     }
 }
 
 sealed class BottomNavItem(val route: String, val icon: Int, val labelRes: Int) {
-    data object Offers : BottomNavItem("offers", R.drawable.mail, R.string.offers)
-    data object Candidatures : BottomNavItem("candidatures", R.drawable.folder, R.string.candidatures)
+    data object Students : BottomNavItem("students", R.drawable.students, R.string.students)
     data object Messages : BottomNavItem("messages", R.drawable.chat, R.string.messages)
     data object Account : BottomNavItem("account", R.drawable.person, R.string.account)
 }

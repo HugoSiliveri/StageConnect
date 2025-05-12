@@ -29,7 +29,7 @@ import com.project.stageconnect.utils.Utils
 import com.project.stageconnect.viewmodel.InternshipViewModel
 
 @Composable
-fun OfferDetailsScreen(navController: NavController, offerId: String?) {
+fun CompanyOfferDetailsScreen(navController: NavController, offerId: String?) {
 
     val internshipViewModel: InternshipViewModel = viewModel()
     var offer by remember { mutableStateOf<Internship?>(null) }
