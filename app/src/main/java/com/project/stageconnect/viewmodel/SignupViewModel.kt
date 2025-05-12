@@ -22,7 +22,8 @@ class SignupViewModel : ViewModel() {
         lastname: String? = null,
         name: String? = null,
         phone: String,
-        address: String
+        address: String,
+        institutionId: String? = null
     ) {
         viewModelScope.launch {
             _signupState.value = DataResult.Loading
@@ -34,7 +35,8 @@ class SignupViewModel : ViewModel() {
                 lastname,
                 name,
                 phone,
-                address
+                address,
+                institutionId
             )
             _signupState.value = if (result.isSuccess) {
                 DataResult.Success

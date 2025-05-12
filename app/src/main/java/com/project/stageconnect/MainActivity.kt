@@ -8,7 +8,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -25,6 +24,7 @@ import com.project.stageconnect.ui.auth.SignupScreen
 import com.project.stageconnect.viewmodel.SignupViewModel
 import com.project.stageconnect.ui.company.CompanyScreen
 import com.project.stageconnect.ui.educational.EducationalScreen
+import com.project.stageconnect.ui.intern.InternScreen
 import com.project.stageconnect.viewmodel.UserViewModel
 
 class MainActivity : ComponentActivity() {
@@ -89,7 +89,25 @@ fun AppNavigation() {
             composable("home") {
                 val currentUser = userViewModel.currentUser
                 when (currentUser?.type) {
-                    "intern" -> Text("Intern view") // TODO
+                    "intern" -> {
+                        val internNavController = rememberNavController()
+                        InternScreen (
+                            currentUser = currentUser,
+                            navController = internNavController,
+                            onLogout = {
+                                navController.navigate("login") {
+                                    popUpTo("home") { inclusive = true }
+                                }
+                            },
+                            OnUpdated = {
+                                userViewModel.loadCurrentUser {
+                                    navController.navigate("home") {
+                                        popUpTo("login") { inclusive = true }
+                                    }
+                                }
+                            }
+                        )
+                    }
                     "company" -> {
                         val companyNavController = rememberNavController()
                         CompanyScreen(

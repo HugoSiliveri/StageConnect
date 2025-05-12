@@ -1,5 +1,6 @@
 package com.project.stageconnect.model.repository
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -28,6 +29,21 @@ class UserRepository {
             }
     }
 
+    fun getEducationalInstitutions(onResult: (List<User>) -> Unit) {
+        db.collection("users").whereEqualTo("type", "educational").get()
+            .addOnSuccessListener { result ->
+                val institutions = result.mapNotNull { doc ->
+                    val institution = doc.toObject(User::class.java)
+                    institution.uid = doc.id
+                    institution
+                }
+                onResult(institutions)
+            }
+            .addOnFailureListener {
+                onResult(emptyList())
+            }
+    }
+
     suspend fun editUser(
         uid: String,
         email: String,
@@ -37,6 +53,7 @@ class UserRepository {
         lastname: String,
         structname: String,
         description: String,
+        institutionId: String
     ): Result<Unit> {
         return try {
             db.collection("users").document(uid).update(
@@ -47,7 +64,8 @@ class UserRepository {
                     "firstname" to firstname,
                     "lastname" to lastname,
                     "structname" to structname,
-                    "description" to description
+                    "description" to description,
+                    "institutionId" to institutionId
                 )
             ).await()
             Result.success(Unit)

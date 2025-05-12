@@ -1,5 +1,6 @@
 package com.project.stageconnect.ui.auth
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,14 +18,18 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.project.stageconnect.R
 import com.project.stageconnect.model.DataResult
+import com.project.stageconnect.model.User
 import com.project.stageconnect.theme.StageConnectTheme
 import com.project.stageconnect.viewmodel.SignupViewModel
+import com.project.stageconnect.viewmodel.UserViewModel
 
 @Composable
 fun SignupScreen(viewModel: SignupViewModel, onSignupSuccess: () -> Unit, onLoginClick: () -> Unit) {
     val signupState by viewModel.signupState.collectAsState()
+    val userViewModel: UserViewModel = viewModel()
 
     val context = LocalContext.current
 
@@ -36,10 +41,21 @@ fun SignupScreen(viewModel: SignupViewModel, onSignupSuccess: () -> Unit, onLogi
     var address by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
+    var institutions by remember { mutableStateOf<List<User>>(emptyList()) }
 
     val intern = stringResource(R.string.intern)
     val company = stringResource(R.string.company)
     val educational = stringResource(R.string.educational_institution)
+
+    LaunchedEffect(Unit) {
+        userViewModel.loadEducationalInstitutions { list ->
+            institutions = list
+        }
+    }
+
+    var selectedItem by remember { mutableStateOf("") }
+    var expandedType by remember { mutableStateOf(false) }
+    var expandedInstitution by remember { mutableStateOf(false) }
 
     StageConnectTheme {
         Surface(
@@ -82,7 +98,6 @@ fun SignupScreen(viewModel: SignupViewModel, onSignupSuccess: () -> Unit, onLogi
                     }
                 }
 
-                var expanded by remember { mutableStateOf(false) }
                 Box {
                     OutlinedTextField(
                         value = selectedType,
@@ -92,8 +107,8 @@ fun SignupScreen(viewModel: SignupViewModel, onSignupSuccess: () -> Unit, onLogi
                         readOnly = true
                     )
                     DropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false }
+                        expanded = expandedType,
+                        onDismissRequest = { expandedType = false }
                     ) {
                         listOf(stringResource(R.string.intern), stringResource(R.string.company), stringResource(R.string.educational_institution)
                         ).forEach { type ->
@@ -101,14 +116,14 @@ fun SignupScreen(viewModel: SignupViewModel, onSignupSuccess: () -> Unit, onLogi
                                 text = { Text(type) },
                                 onClick = {
                                     selectedType = type
-                                    expanded = false
+                                    expandedType = false
                                 }
                             )
                         }
                     }
                     Spacer(modifier = Modifier
                         .matchParentSize()
-                        .clickable { expanded = true })
+                        .clickable { expandedType = true })
                 }
 
                 when (selectedType) {
@@ -143,6 +158,34 @@ fun SignupScreen(viewModel: SignupViewModel, onSignupSuccess: () -> Unit, onLogi
                             label = { Text(stringResource(R.string.address)) },
                             modifier = Modifier.fillMaxWidth()
                         )
+                        Box {
+                            OutlinedTextField(
+                                value = selectedItem,
+                                onValueChange = {},
+                                label = { Text(stringResource(R.string.educational_institution)) },
+                                modifier = Modifier.fillMaxWidth(),
+                                readOnly = true
+                            )
+                            DropdownMenu(
+                                expanded = expandedInstitution,
+                                onDismissRequest = { expandedInstitution = false },
+                                modifier = Modifier.heightIn(max = 200.dp)
+                            ) {
+                                institutions.forEach { option ->
+                                    DropdownMenuItem(
+                                        text = { Text(option.structname) },
+                                        onClick = {
+                                            selectedItem = option.structname
+                                            expandedInstitution = false
+                                        }
+                                    )
+                                }
+                            }
+                            Spacer(modifier = Modifier
+                                .matchParentSize()
+                                .clickable { expandedInstitution = true }
+                            )
+                        }
                         OutlinedTextField(
                             value = password,
                             onValueChange = { password = it },
@@ -247,7 +290,7 @@ fun SignupScreen(viewModel: SignupViewModel, onSignupSuccess: () -> Unit, onLogi
                             educational -> "educational"
                             else -> "unknown"
                         }
-                        viewModel.signup(typeKey, email, password, firstname, lastname, name, phone, address)
+                        viewModel.signup(typeKey, email, password, firstname, lastname, name, phone, address, institutions.find { it.structname == selectedItem }?.uid)
                     },
                     enabled = signupState != DataResult.Loading
                 ) {

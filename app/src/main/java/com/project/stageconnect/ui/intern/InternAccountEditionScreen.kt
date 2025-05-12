@@ -1,4 +1,4 @@
-package com.project.stageconnect.ui.company
+package com.project.stageconnect.ui.intern
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
@@ -37,7 +37,7 @@ import com.project.stageconnect.model.User
 import com.project.stageconnect.viewmodel.UserViewModel
 
 @Composable
-fun CompanyAccountEditionScreen(currentUser: User, navController: NavController, onUpdated: () -> Unit) {
+fun InternAccountEditionScreen(currentUser: User, navController: NavController, onUpdated: () -> Unit) {
 
     val userViewModel: UserViewModel = viewModel()
     val userState by userViewModel.userState.collectAsState()
@@ -47,7 +47,8 @@ fun CompanyAccountEditionScreen(currentUser: User, navController: NavController,
     var phone by remember { mutableStateOf(currentUser.phone) }
     var address by remember { mutableStateOf(currentUser.address) }
     var description by remember { mutableStateOf(currentUser.description) }
-    var structname by remember { mutableStateOf(currentUser.structname) }
+    var firstname by remember { mutableStateOf(currentUser.firstname) }
+    var lastname by remember { mutableStateOf(currentUser.lastname) }
 
     LazyColumn (
         modifier = Modifier
@@ -62,9 +63,19 @@ fun CompanyAccountEditionScreen(currentUser: User, navController: NavController,
             }
 
             OutlinedTextField(
-                value = structname,
-                onValueChange = { structname = it },
-                label = { Text(stringResource(R.string.name)) },
+                value = firstname,
+                onValueChange = { firstname = it },
+                label = { Text(stringResource(R.string.first_name)) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                singleLine = true
+            )
+
+            OutlinedTextField(
+                value = lastname,
+                onValueChange = { lastname = it },
+                label = { Text(stringResource(R.string.last_name)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp),
@@ -135,7 +146,7 @@ fun CompanyAccountEditionScreen(currentUser: User, navController: NavController,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
-                    onClick = { userViewModel.editUser(currentUser.uid, email, phone, address, currentUser.firstname, currentUser.lastname, structname, description, "") },
+                    onClick = { userViewModel.editUser(currentUser.uid, email, phone, address, firstname, lastname, currentUser.structname, description, currentUser.institutionId) },
                     enabled = userState != DataResult.Loading
                 ) {
                     Text(stringResource(R.string.save_modifications))

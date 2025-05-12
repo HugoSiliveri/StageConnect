@@ -81,8 +81,6 @@ fun LoginScreen(viewModel: LoginViewModel, onLoginSuccess: () -> Unit, onSignUpC
                     singleLine = true
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
-
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },

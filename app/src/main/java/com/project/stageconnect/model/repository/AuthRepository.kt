@@ -25,7 +25,8 @@ class AuthRepository {
         lastname: String? = null,
         name: String? = null,
         phone: String,
-        address: String
+        address: String,
+        institutionId: String? = null
     ): Result<Unit> {
         return try {
             val authResult = auth.createUserWithEmailAndPassword(email, password).await()
@@ -35,13 +36,14 @@ class AuthRepository {
                 "type" to typeKey,
                 "email" to email,
                 "phone" to phone,
-                "address" to address
+                "address" to address,
             )
 
             when (typeKey) {
                 "intern" -> {
                     userData["firstname"] = firstname ?: ""
                     userData["lastname"] = lastname ?: ""
+                    userData["institutionId"] = institutionId ?: ""
                 }
                 "company", "educational" -> {
                     userData["structname"] = name ?: ""

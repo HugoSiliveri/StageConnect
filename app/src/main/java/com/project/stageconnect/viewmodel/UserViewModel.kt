@@ -1,5 +1,6 @@
 package com.project.stageconnect.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.stageconnect.model.DataResult
@@ -16,6 +17,12 @@ class UserViewModel : ViewModel() {
     private val _userState = MutableStateFlow<DataResult>(DataResult.Idle)
     val userState: StateFlow<DataResult> = _userState
 
+    fun loadUser(onUserLoaded: (User?) -> Unit = {}, uid: String) {
+        userRepository.getUser(uid) { user ->
+            onUserLoaded(user)
+        }
+    }
+
     fun loadCurrentUser(onUserLoaded: (User?) -> Unit = {}) {
         val uid = userRepository.getCurrentUserId()
         if (uid == null) {
@@ -29,6 +36,12 @@ class UserViewModel : ViewModel() {
         }
     }
 
+    fun loadEducationalInstitutions(onInstitutionsLoaded: (List<User>) -> Unit = {}) {
+        userRepository.getEducationalInstitutions { list ->
+            onInstitutionsLoaded(list)
+        }
+    }
+
     fun editUser(
         uid: String,
         email: String,
@@ -38,6 +51,7 @@ class UserViewModel : ViewModel() {
         lastname: String,
         structname: String,
         description: String,
+        institutionId: String
     ) {
         viewModelScope.launch {
             _userState.value = DataResult.Loading
@@ -49,7 +63,8 @@ class UserViewModel : ViewModel() {
                 firstname,
                 lastname,
                 structname,
-                description
+                description,
+                institutionId
             )
             _userState.value = if (result.isSuccess) {
                 loadCurrentUser()

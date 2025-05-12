@@ -111,19 +111,19 @@ fun CompanyAccountScreen(currentUser: User, navController: NavController, onLogo
             )
 
             Text(
-                text = "Email : ${currentUser.email}",
+                text = "${R.string.email} : ${currentUser.email}",
                 style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Justify),
                 modifier = Modifier.padding(top = 8.dp)
             )
 
             Text(
-                text = "Phone : ${currentUser.phone}",
+                text = "${R.string.phone} : ${currentUser.phone}",
                 style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Justify),
                 modifier = Modifier.padding(top = 8.dp)
             )
 
             Text(
-                text = "Address : ${currentUser.address}",
+                text = "${R.string.address} : ${currentUser.address}",
                 style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Justify),
                 modifier = Modifier.padding(top = 8.dp)
             )
