@@ -62,46 +62,44 @@ fun InternAccountScreen(currentUser: User, navController: NavController, onLogou
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Column (modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) {
-                        Row {
-                            Text(
-                                text = currentUser.firstname,
-                                style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                            )
-
-                            Text(
-                                text = currentUser.lastname,
-                                style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                                modifier = Modifier.padding(start = 6.dp),
-                            )
-                        }
+                Column (modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) {
+                    Row {
+                        Text(
+                            text = currentUser.firstname,
+                            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+                        )
 
                         Text(
-                            text = currentUser.type,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(top = 4.dp)
+                            text = currentUser.lastname,
+                            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+                            modifier = Modifier.padding(start = 6.dp),
                         )
                     }
 
+                    Text(
+                        text = currentUser.type,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
+
+                Row {
                     FilledTonalIconButton(
-                        modifier = Modifier.padding(start = 16.dp),
+                        modifier = Modifier.padding(end = 8.dp),
                         onClick = { navController.navigate("account_edition") }
                     ) {
                         Icon(Icons.Default.Edit, contentDescription = "")
                     }
-                }
 
-                FilledTonalIconButton(
-                    onClick = {
-                        userViewModel.signOut()
-                        onLogout()
+                    FilledTonalIconButton(
+                        onClick = {
+                            userViewModel.signOut()
+                            onLogout()
+                        }
+                    ) {
+                        Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "")
                     }
-                ) {
-                    Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "")
                 }
 
                 if (userState is DataResult.Error) {

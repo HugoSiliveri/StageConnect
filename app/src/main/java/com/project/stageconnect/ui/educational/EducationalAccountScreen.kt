@@ -53,38 +53,36 @@ fun EducationalAccountScreen(currentUser: User, navController: NavController, on
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Column (modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) {
-                        Text(
-                            text = currentUser.structname,
-                            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                        )
+                Column (modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) {
+                    Text(
+                        text = currentUser.structname,
+                        style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+                    )
 
-                        Text(
-                            text = currentUser.type,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(top = 4.dp)
-                        )
-                    }
+                    Text(
+                        text = currentUser.type,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
 
+                Row {
                     FilledTonalIconButton(
-                        modifier = Modifier.padding(start = 16.dp),
+                        modifier = Modifier.padding(end = 8.dp),
                         onClick = { navController.navigate("account_edition") }
                     ) {
                         Icon(Icons.Default.Edit, contentDescription = "")
                     }
-                }
 
-                FilledTonalIconButton(
-                    onClick = {
-                        userViewModel.signOut()
-                        onLogout()
+                    FilledTonalIconButton(
+                        onClick = {
+                            userViewModel.signOut()
+                            onLogout()
+                        }
+                    ) {
+                        Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "")
                     }
-                ) {
-                    Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "")
                 }
 
                 if (userState is DataResult.Error) {

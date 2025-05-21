@@ -57,7 +57,7 @@ fun InternScreen(currentUser: User, navController: NavHostController, onLogout: 
                         label = {
                             Text(
                                 text = stringResource(id = item.labelRes),
-                                fontSize = (10.5).sp
+                                fontSize = (9.5).sp
                             )
                         }
                     )
