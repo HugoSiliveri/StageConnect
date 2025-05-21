@@ -16,8 +16,14 @@ class InternshipViewModel : ViewModel() {
     private val _internshipState = MutableStateFlow<DataResult>(DataResult.Idle)
     val internshipState: StateFlow<DataResult> = _internshipState
 
-    fun loadInternships(onInternshipsLoaded: (List<Internship>) -> Unit) {
-        internshipRepository.getInternships { list ->
+    fun loadInternship(onInternshipLoaded: (Internship?) -> Unit, internshipId: String) {
+        internshipRepository.getInternship(internshipId) { internship ->
+            onInternshipLoaded(internship)
+        }
+    }
+
+    fun loadNoApplicationInternships(onInternshipsLoaded: (List<Internship>) -> Unit, userId: String) {
+        internshipRepository.getNoApplicationInternships(userId) { list ->
             onInternshipsLoaded(list)
         }
     }
@@ -28,9 +34,9 @@ class InternshipViewModel : ViewModel() {
         }
     }
 
-    fun loadInternship(onInternshipLoaded: (Internship?) -> Unit, internshipId: String) {
-        internshipRepository.getInternship(internshipId) { internship ->
-            onInternshipLoaded(internship)
+    fun loadApplicationInternships(onInternshipsLoaded: (List<Internship>) -> Unit, userId: String) {
+        internshipRepository.getApplicationInternships(userId) { list ->
+            onInternshipsLoaded(list)
         }
     }
 
@@ -52,6 +58,18 @@ class InternshipViewModel : ViewModel() {
                 location,
                 duration
             )
+            _internshipState.value = if (result.isSuccess) {
+                DataResult.Success
+            } else {
+                DataResult.Error(result.exceptionOrNull()?.message ?: "Erreur inconnue")
+            }
+        }
+    }
+
+    fun deleteInternship(internshipId: String){
+        viewModelScope.launch {
+            _internshipState.value = DataResult.Loading
+            val result = internshipRepository.deleteInternship(internshipId)
             _internshipState.value = if (result.isSuccess) {
                 DataResult.Success
             } else {

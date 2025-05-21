@@ -101,7 +101,7 @@ fun CompanyOffersScreen(currentUser: User, navController: NavController) {
             }
         } else {
             LazyColumn(modifier = Modifier.wrapContentHeight()) {
-                itemsIndexed(offers) { index, offer ->
+                itemsIndexed(filteredOffers) { index, offer ->
                     Column(
                         modifier = Modifier
                             .padding(vertical = 4.dp)

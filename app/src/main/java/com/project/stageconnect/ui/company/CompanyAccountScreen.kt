@@ -45,6 +45,7 @@ fun CompanyAccountScreen(currentUser: User, navController: NavController, onLogo
     LazyColumn (
         modifier = Modifier
             .wrapContentHeight()
+            .padding(8.dp)
             .fillMaxSize()
     ) {
         item {

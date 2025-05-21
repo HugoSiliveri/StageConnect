@@ -52,6 +52,7 @@ fun EducationalAccountEditionScreen(currentUser: User, navController: NavControl
     LazyColumn (
         modifier = Modifier
             .wrapContentHeight()
+            .padding(8.dp)
             .fillMaxSize()
     ) {
         item {

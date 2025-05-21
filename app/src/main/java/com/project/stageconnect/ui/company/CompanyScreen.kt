@@ -1,5 +1,6 @@
 package com.project.stageconnect.ui.company
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -20,7 +21,7 @@ import com.project.stageconnect.R
 import com.project.stageconnect.model.User
 
 @Composable
-fun CompanyScreen(currentUser: User, navController: NavHostController, onLogout: () -> Unit, OnUpdated: () -> Unit) {
+fun CompanyScreen(currentUser: User, navController: NavHostController, onLogout: () -> Unit, onUpdated: () -> Unit) {
     val items = listOf(
         BottomNavItem.Offers,
         BottomNavItem.Applications,
@@ -70,7 +71,7 @@ fun CompanyScreen(currentUser: User, navController: NavHostController, onLogout:
 
             composable("add_offer") { CompanyOfferCreationScreen(currentUser, navController) }
             composable("offer_details/{offerId}") { CompanyOfferDetailsScreen(navController, it.arguments?.getString("offerId")) }
-            composable("account_edition") { CompanyAccountEditionScreen(currentUser, navController, OnUpdated) }
+            composable("account_edition") { CompanyAccountEditionScreen(currentUser, navController, onUpdated) }
         }
     }
 }

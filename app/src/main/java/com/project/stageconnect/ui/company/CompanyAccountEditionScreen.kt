@@ -52,6 +52,7 @@ fun CompanyAccountEditionScreen(currentUser: User, navController: NavController,
     LazyColumn (
         modifier = Modifier
             .wrapContentHeight()
+            .padding(8.dp)
             .fillMaxSize()
     ) {
         item {

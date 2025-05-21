@@ -20,7 +20,7 @@ import com.project.stageconnect.R
 import com.project.stageconnect.model.User
 
 @Composable
-fun EducationalScreen(currentUser: User, navController: NavHostController, onLogout: () -> Unit, OnUpdated: () -> Unit) {
+fun EducationalScreen(currentUser: User, navController: NavHostController, onLogout: () -> Unit, onUpdated: () -> Unit) {
     val items = listOf(
         BottomNavItem.Students,
         BottomNavItem.Messages,
@@ -66,7 +66,7 @@ fun EducationalScreen(currentUser: User, navController: NavHostController, onLog
             composable(BottomNavItem.Messages.route) { EducationalMessagesScreen() }
             composable(BottomNavItem.Account.route) { EducationalAccountScreen(currentUser, navController, onLogout) }
 
-            composable("account_edition") { EducationalAccountEditionScreen(currentUser, navController, OnUpdated) }
+            composable("account_edition") { EducationalAccountEditionScreen(currentUser, navController, onUpdated) }
         }
     }
 }

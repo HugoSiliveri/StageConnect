@@ -21,7 +21,7 @@ import com.project.stageconnect.R
 import com.project.stageconnect.model.User
 
 @Composable
-fun InternScreen(currentUser: User, navController: NavHostController, onLogout: () -> Unit, OnUpdated: () -> Unit) {
+fun InternScreen(currentUser: User, navController: NavHostController, onLogout: () -> Unit, onUpdated: () -> Unit) {
     val items = listOf(
         BottomNavItem.Offers,
         BottomNavItem.Applications,
@@ -69,12 +69,12 @@ fun InternScreen(currentUser: User, navController: NavHostController, onLogout: 
                 .padding(innerPadding)
         ) {
             composable(BottomNavItem.Offers.route) { InternOffersScreen(currentUser, navController) }
-            composable(BottomNavItem.Applications.route) { InternApplicationsScreen() }
+            composable(BottomNavItem.Applications.route) { InternApplicationsScreen(currentUser, navController) }
             composable(BottomNavItem.Internship.route) { InternInternshipScreen() }
             composable(BottomNavItem.Messages.route) { InternMessagesScreen() }
             composable(BottomNavItem.Account.route) { InternAccountScreen(currentUser, navController, onLogout) }
 
-            composable("account_edition") { InternAccountEditionScreen(currentUser, navController, OnUpdated) }
+            composable("account_edition") { InternAccountEditionScreen(currentUser, navController, onUpdated) }
             composable("offer_details/{offerId}") { InternOfferDetailsScreen(currentUser, navController, it.arguments?.getString("offerId")) }
         }
     }

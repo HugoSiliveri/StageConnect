@@ -47,4 +47,14 @@
     <string name="do_you_want_to_apply_to_this_offer">Do you want to apply to this offer ?</string>
     <string name="offer_not_found">Offer not found</string>
     <string name="your_application_has_been_registered">Your application has been registered !</string>
+    <string name="application">Application</string>
+    <string name="do_you_want_to_cancel_your_application_to_this_offer">Do you want to cancel your application to this offer ?</string>
+    <string name="your_application_has_been_cancelled">Your application has been cancelled</string>
+    <string name="delete">Delete</string>
+    <string name="do_you_want_to_delete_that_offer">Do you want to delete that offer ?</string>
+    <string name="internship_offer">Internship offer</string>
+    <string name="the_offer_has_been_deleted">The offer has been deleted</string>
+    <string name="your_application_is_pending">Your application is pending</string>
+    <string name="your_application_has_been_accepted">Your application has been accepted</string>
+    <string name="your_application_has_been_denied">Your application has been denied</string>
 </resources>

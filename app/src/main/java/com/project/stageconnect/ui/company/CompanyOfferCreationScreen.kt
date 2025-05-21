@@ -32,7 +32,7 @@ fun CompanyOfferCreationScreen(currentUser: User, navController: NavController) 
     val context = LocalContext.current
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().padding(8.dp)
     ) {
         FilledTonalIconButton(
             onClick = { navController.navigate("offers") }

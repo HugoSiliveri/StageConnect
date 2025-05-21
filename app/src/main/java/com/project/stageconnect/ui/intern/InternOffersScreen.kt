@@ -1,5 +1,6 @@
 package com.project.stageconnect.ui.intern
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -53,9 +54,9 @@ fun InternOffersScreen(currentUser: User, navController: NavController) {
     var offers by remember { mutableStateOf<List<Internship>>(emptyList()) }
 
     LaunchedEffect(Unit) {
-        internshipViewModel.loadInternships { list ->
+        internshipViewModel.loadNoApplicationInternships({ list ->
             offers = list
-        }
+        }, currentUser.uid)
     }
 
     val filteredOffers = offers.filter { offer ->
@@ -69,9 +70,7 @@ fun InternOffersScreen(currentUser: User, navController: NavController) {
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp),
+        modifier = Modifier.fillMaxSize().padding(8.dp),
     ) {
 
         SearchBar(
@@ -102,7 +101,7 @@ fun InternOffersScreen(currentUser: User, navController: NavController) {
             }
         } else {
             LazyColumn(modifier = Modifier.wrapContentHeight()) {
-                itemsIndexed(offers) { index, offer ->
+                itemsIndexed(filteredOffers) { index, offer ->
                     Column(
                         modifier = Modifier
                             .padding(vertical = 4.dp)
