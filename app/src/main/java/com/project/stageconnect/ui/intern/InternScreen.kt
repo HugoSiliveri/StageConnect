@@ -19,16 +19,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.project.stageconnect.R
 import com.project.stageconnect.model.User
-import com.project.stageconnect.ui.educational.EducationalAccountEditionScreen
-import com.project.stageconnect.ui.educational.EducationalAccountScreen
-import com.project.stageconnect.ui.educational.EducationalMessagesScreen
-import com.project.stageconnect.ui.educational.EducationalStudentsScreen
 
 @Composable
 fun InternScreen(currentUser: User, navController: NavHostController, onLogout: () -> Unit, OnUpdated: () -> Unit) {
     val items = listOf(
         BottomNavItem.Offers,
-        BottomNavItem.Candidatures,
+        BottomNavItem.Applications,
         BottomNavItem.Internship,
         BottomNavItem.Messages,
         BottomNavItem.Account
@@ -72,20 +68,21 @@ fun InternScreen(currentUser: User, navController: NavHostController, onLogout: 
                 .padding(start = 8.dp, end = 8.dp, top = 16.dp)
                 .padding(innerPadding)
         ) {
-            composable(BottomNavItem.Offers.route) { InternOffersScreen() }
-            composable(BottomNavItem.Candidatures.route) { InternCandidaturesScreen() }
+            composable(BottomNavItem.Offers.route) { InternOffersScreen(currentUser, navController) }
+            composable(BottomNavItem.Applications.route) { InternApplicationsScreen() }
             composable(BottomNavItem.Internship.route) { InternInternshipScreen() }
             composable(BottomNavItem.Messages.route) { InternMessagesScreen() }
             composable(BottomNavItem.Account.route) { InternAccountScreen(currentUser, navController, onLogout) }
 
             composable("account_edition") { InternAccountEditionScreen(currentUser, navController, OnUpdated) }
+            composable("offer_details/{offerId}") { InternOfferDetailsScreen(currentUser, navController, it.arguments?.getString("offerId")) }
         }
     }
 }
 
 sealed class BottomNavItem(val route: String, val icon: Int, val labelRes: Int) {
     data object Offers : BottomNavItem("offers", R.drawable.mail, R.string.offers)
-    data object Candidatures : BottomNavItem("candidatures", R.drawable.folder, R.string.candidatures)
+    data object Applications : BottomNavItem("applications", R.drawable.folder, R.string.applications)
     data object Internship : BottomNavItem("internship", R.drawable.internship, R.string.internship)
     data object Messages : BottomNavItem("messages", R.drawable.chat, R.string.messages)
     data object Account : BottomNavItem("account", R.drawable.person, R.string.account)

@@ -42,8 +42,6 @@ fun CompanyOffersScreen(currentUser: User, navController: NavController) {
     var searchQuery by remember { mutableStateOf("") }
     var isActive by remember { mutableStateOf(false) }
 
-    val userViewModel: UserViewModel = viewModel()
-
     val internshipViewModel: InternshipViewModel = viewModel()
 
     var offers by remember { mutableStateOf<List<Internship>>(emptyList()) }
@@ -63,7 +61,7 @@ fun CompanyOffersScreen(currentUser: User, navController: NavController) {
         ).any { it.contains(searchQuery, ignoreCase = true) }
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize().padding(8.dp)) {
 
         SearchBar(
             query = searchQuery,

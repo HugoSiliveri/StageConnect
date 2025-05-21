@@ -23,7 +23,7 @@ import com.project.stageconnect.model.User
 fun CompanyScreen(currentUser: User, navController: NavHostController, onLogout: () -> Unit, OnUpdated: () -> Unit) {
     val items = listOf(
         BottomNavItem.Offers,
-        BottomNavItem.Candidatures,
+        BottomNavItem.Applications,
         BottomNavItem.Messages,
         BottomNavItem.Account
     )
@@ -64,7 +64,7 @@ fun CompanyScreen(currentUser: User, navController: NavHostController, onLogout:
                 .padding(innerPadding)
         ) {
             composable(BottomNavItem.Offers.route) { CompanyOffersScreen(currentUser, navController) }
-            composable(BottomNavItem.Candidatures.route) { CompanyCandidaturesScreen() }
+            composable(BottomNavItem.Applications.route) { CompanyApplicationsScreen() }
             composable(BottomNavItem.Messages.route) { CompanyMessagesScreen() }
             composable(BottomNavItem.Account.route) { CompanyAccountScreen(currentUser, navController, onLogout) }
 
@@ -77,7 +77,7 @@ fun CompanyScreen(currentUser: User, navController: NavHostController, onLogout:
 
 sealed class BottomNavItem(val route: String, val icon: Int, val labelRes: Int) {
     data object Offers : BottomNavItem("offers", R.drawable.mail, R.string.offers)
-    data object Candidatures : BottomNavItem("candidatures", R.drawable.folder, R.string.candidatures)
+    data object Applications : BottomNavItem("applications", R.drawable.folder, R.string.applications)
     data object Messages : BottomNavItem("messages", R.drawable.chat, R.string.messages)
     data object Account : BottomNavItem("account", R.drawable.person, R.string.account)
 }

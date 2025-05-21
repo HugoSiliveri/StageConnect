@@ -23,7 +23,7 @@
     <string name="account_created">Account created with success</string>
     <string name="connexion_successful">Connexion successful</string>
     <string name="offers">Offers</string>
-    <string name="candidatures">Candidatures</string>
+    <string name="applications">Applications</string>
     <string name="account">Account</string>
     <string name="students">Students</string>
     <string name="internship">Internship</string>
@@ -38,7 +38,13 @@
     <string name="location">Location</string>
     <string name="duration">Duration</string>
     <string name="informations">Informations</string>
-    <string name="save_modifications">Save modifications</string>
+    <string name="save_modifications">Save</string>
     <string name="account_updated_successfully">Account updated successfully</string>
     <string name="disconnection_successful">Disconnection successful</string>
+    <string name="apply">Apply</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="do_you_want_to_apply_to_this_offer">Do you want to apply to this offer ?</string>
+    <string name="offer_not_found">Offer not found</string>
+    <string name="your_application_has_been_registered">Your application has been registered !</string>
 </resources>
