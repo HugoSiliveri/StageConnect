@@ -10,5 +10,6 @@ data class User(
     var lastname: String = "",
     var structname: String = "",
     var description: String = "",
-    var institutionId: String = ""
+    var institutionId: String = "",
+    var cvName: String = ""
 )

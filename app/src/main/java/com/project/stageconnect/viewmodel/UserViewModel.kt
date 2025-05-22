@@ -1,6 +1,7 @@
 package com.project.stageconnect.viewmodel
 
-import android.util.Log
+import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.stageconnect.model.DataResult
@@ -36,6 +37,12 @@ class UserViewModel : ViewModel() {
         }
     }
 
+    fun loadUsers(onUsersLoaded: (List<User>) -> Unit = {}, userIds: List<String>) {
+        userRepository.getUsers(userIds) { list ->
+            onUsersLoaded(list)
+        }
+    }
+
     fun loadEducationalInstitutions(onInstitutionsLoaded: (List<User>) -> Unit = {}) {
         userRepository.getEducationalInstitutions { list ->
             onInstitutionsLoaded(list)
@@ -51,7 +58,8 @@ class UserViewModel : ViewModel() {
         lastname: String,
         structname: String,
         description: String,
-        institutionId: String
+        institutionId: String,
+        cvName: String
     ) {
         viewModelScope.launch {
             _userState.value = DataResult.Loading
@@ -64,7 +72,8 @@ class UserViewModel : ViewModel() {
                 lastname,
                 structname,
                 description,
-                institutionId
+                institutionId,
+                cvName
             )
             _userState.value = if (result.isSuccess) {
                 loadCurrentUser()
@@ -85,6 +94,18 @@ class UserViewModel : ViewModel() {
             } else {
                 _userState.value = DataResult.Error(result.exceptionOrNull()?.message ?: "Erreur inconnue")
             }
+        }
+    }
+
+    fun uploadCv(onResult: (Unit?) -> Unit = {}, userId: String, fileName: String, fileUri: Uri) {
+        userRepository.uploadCv(userId, fileName, fileUri) { list ->
+            onResult(list)
+        }
+    }
+
+    fun fetchCv(onResult: (Unit?) -> Unit = {}, userId: String, fileName: String, context: Context) {
+        userRepository.fetchCv(userId, fileName, context) { list ->
+            onResult(list)
         }
     }
 }

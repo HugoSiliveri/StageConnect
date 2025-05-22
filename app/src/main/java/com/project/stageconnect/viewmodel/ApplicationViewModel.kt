@@ -16,9 +16,21 @@ class ApplicationViewModel : ViewModel() {
     private val _applicationState = MutableStateFlow<DataResult>(DataResult.Idle)
     val applicationState: StateFlow<DataResult> = _applicationState
 
-    fun loadApplication(onApplicationLoaded: (Application?) -> Unit, userId: String, internshipId: String) {
+    fun loadApplication(onApplicationLoaded: (Application?) -> Unit, applicationId: String) {
+        applicationRepository.getApplication(applicationId) { application ->
+            onApplicationLoaded(application)
+        }
+    }
+
+    fun loadApplicationByUserAndInternship(onApplicationLoaded: (Application?) -> Unit, userId: String, internshipId: String) {
         applicationRepository.getApplicationByUserAndInternship(userId, internshipId) { application ->
             onApplicationLoaded(application)
+        }
+    }
+
+    fun loadCompanyApplications(onApplicationsLoaded: (List<Application>) -> Unit, companyId: String) {
+        applicationRepository.getCompanyApplications(companyId) { applications ->
+            onApplicationsLoaded(applications)
         }
     }
 

@@ -1,7 +1,11 @@
 package com.project.stageconnect.ui.intern
 
+import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -34,13 +39,15 @@ import androidx.navigation.NavController
 import com.project.stageconnect.R
 import com.project.stageconnect.model.DataResult
 import com.project.stageconnect.model.User
+import com.project.stageconnect.utils.Utils
 import com.project.stageconnect.viewmodel.UserViewModel
 
 @Composable
 fun InternAccountEditionScreen(currentUser: User, navController: NavController, onUpdated: () -> Unit) {
 
     val userViewModel: UserViewModel = viewModel()
-    val userState by userViewModel.userState.collectAsState()
+    val userEditState by userViewModel.userState.collectAsState()
+    val userUploadState by userViewModel.userState.collectAsState()
     val context = LocalContext.current
 
     var email by remember { mutableStateOf(currentUser.email) }
@@ -49,6 +56,18 @@ fun InternAccountEditionScreen(currentUser: User, navController: NavController, 
     var description by remember { mutableStateOf(currentUser.description) }
     var firstname by remember { mutableStateOf(currentUser.firstname) }
     var lastname by remember { mutableStateOf(currentUser.lastname) }
+    var cvUri by remember { mutableStateOf<Uri?>(null) }
+    var cvFileName by remember { mutableStateOf("") }
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri: Uri? ->
+            if (uri != null) {
+                cvUri = uri
+                cvFileName = Utils.getFileNameFromUri(context, uri)
+            }
+        }
+    )
 
     LazyColumn (
         modifier = Modifier
@@ -122,6 +141,41 @@ fun InternAccountEditionScreen(currentUser: User, navController: NavController, 
                 singleLine = true
             )
 
+            HorizontalDivider(
+                modifier = Modifier.padding(vertical = 16.dp),
+            )
+
+            Text(
+                stringResource(R.string.cv),
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+            )
+
+            Text(cvFileName, modifier = Modifier.padding(vertical = 4.dp))
+
+            Row {
+                TextButton(
+                    onClick = { launcher.launch("application/pdf") },
+                    modifier = Modifier.padding(top = 4.dp, bottom = 4.dp, end = 4.dp)
+                ) {
+                    Text(stringResource(R.string.select_a_pdf_file))
+                }
+
+                Button(
+                    enabled = cvUri != null && cvFileName.isNotEmpty(),
+                    onClick = {
+                        val uri = cvUri
+                        val fileName = cvFileName
+                        if (uri != null && fileName.isNotEmpty()) {
+                            userViewModel.uploadCv({
+                                Toast.makeText(context, context.getString(R.string.file_uploaded_successfully), Toast.LENGTH_SHORT).show()
+                            },currentUser.uid, fileName, uri)
+                        }
+                    }
+                ) {
+                    Text(stringResource(R.string.upload))
+                }
+            }
+
 
             HorizontalDivider(
                 modifier = Modifier.padding(vertical = 16.dp),
@@ -147,23 +201,35 @@ fun InternAccountEditionScreen(currentUser: User, navController: NavController, 
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
-                    onClick = { userViewModel.editUser(currentUser.uid, email, phone, address, firstname, lastname, currentUser.structname, description, currentUser.institutionId) },
-                    enabled = userState != DataResult.Loading
+                    onClick = { userViewModel.editUser(currentUser.uid, email, phone, address, firstname, lastname, currentUser.structname, description, currentUser.institutionId, cvFileName) },
+                    enabled = userEditState != DataResult.Loading
                 ) {
                     Text(stringResource(R.string.save_modifications))
                 }
             }
 
-            if (userState is DataResult.Error) {
-                LaunchedEffect((userState as DataResult.Error).message) {
-                    Toast.makeText(context, context.getString(R.string.error_message) + (userState as DataResult.Error).message, Toast.LENGTH_SHORT).show()
+            if (userEditState is DataResult.Error) {
+                LaunchedEffect((userEditState as DataResult.Error).message) {
+                    Toast.makeText(context, context.getString(R.string.error_message) + (userEditState as DataResult.Error).message, Toast.LENGTH_SHORT).show()
                 }
             }
 
-            if (userState == DataResult.Success) {
+            if (userEditState == DataResult.Success) {
                 LaunchedEffect(Unit) {
                     Toast.makeText(context, context.getString(R.string.account_updated_successfully) , Toast.LENGTH_SHORT).show()
                     onUpdated()
+                }
+            }
+
+            if (userUploadState is DataResult.Error) {
+                LaunchedEffect((userUploadState as DataResult.Error).message) {
+                    Toast.makeText(context, context.getString(R.string.error_message) + (userUploadState as DataResult.Error).message, Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            if (userUploadState == DataResult.Success) {
+                LaunchedEffect(Unit) {
+                    Toast.makeText(context, context.getString(R.string.file_uploaded_successfully) , Toast.LENGTH_SHORT).show()
                 }
             }
         }

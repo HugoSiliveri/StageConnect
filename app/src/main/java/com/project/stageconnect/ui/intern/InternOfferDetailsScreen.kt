@@ -65,7 +65,7 @@ fun InternOfferDetailsScreen(currentUser: User, navController: NavController, of
             offer = internship
         }, offerId ?: "")
 
-        applicationViewModel.loadApplication({ app ->
+        applicationViewModel.loadApplicationByUserAndInternship({ app ->
             application = app
         }, currentUser.uid, offerId ?: "")
     }

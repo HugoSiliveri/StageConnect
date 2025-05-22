@@ -56,4 +56,18 @@
     <string name="your_application_is_pending">Your application is pending</string>
     <string name="your_application_has_been_accepted">Your application has been accepted</string>
     <string name="your_application_has_been_denied">Your application has been denied</string>
+    <string name="pending">Pending</string>
+    <string name="accepted">Accepted</string>
+    <string name="denied">Denied</string>
+    <string name="no_candidate_found">No candidate found</string>
+    <string name="accept">Accept</string>
+    <string name="refuse">Refuse</string>
+    <string name="this_application_has_been_accepted">This application has been accepted</string>
+    <string name="this_application_has_been_denied">This application has been denied</string>
+    <string name="cv">CV</string>
+    <string name="no_file_selected">No file selected</string>
+    <string name="file_selected">File selected</string>
+    <string name="select_a_pdf_file">Select a PDF file</string>
+    <string name="upload">Upload</string>
+    <string name="file_uploaded_successfully">File uploaded successfully</string>
 </resources>

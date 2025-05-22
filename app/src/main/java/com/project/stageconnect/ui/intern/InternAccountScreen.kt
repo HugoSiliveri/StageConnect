@@ -1,6 +1,8 @@
 package com.project.stageconnect.ui.intern
 
+import android.graphics.drawable.Icon
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -150,6 +153,34 @@ fun InternAccountScreen(currentUser: User, navController: NavController, onLogou
                 modifier = Modifier.padding(top = 8.dp)
             )
 
+
+            HorizontalDivider(
+                modifier = Modifier.padding(vertical = 16.dp),
+            )
+
+            Text(
+                text = stringResource(R.string.cv),
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
+            )
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(end = 4.dp)
+            ) {
+                Image(painterResource(R.drawable.pdf), "pdf")
+                TextButton (
+                    modifier = Modifier.padding(top = 8.dp),
+                    onClick = {
+                        userViewModel.fetchCv({}, currentUser.uid, currentUser.cvName, context)
+                    }
+                ) {
+                    Text(
+                        currentUser.cvName,
+                        style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Justify),
+                        color = MaterialTheme.colorScheme.tertiary
+                    )
+                }
+            }
 
             HorizontalDivider(
                 modifier = Modifier.padding(vertical = 16.dp),

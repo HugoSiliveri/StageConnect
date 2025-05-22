@@ -101,7 +101,7 @@ fun InternApplicationsScreen(currentUser: User, navController: NavHostController
                 itemsIndexed(offers) { index, offer ->
                     Column(
                         modifier = Modifier
-                            .padding(vertical = 4.dp)
+                            .padding(vertical = 2.dp)
                             .clickable { navController.navigate("offer_details/${offer.id}") }
                     ) {
                         if (index == 0) {

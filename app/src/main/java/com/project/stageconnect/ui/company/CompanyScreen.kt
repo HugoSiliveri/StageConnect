@@ -65,12 +65,13 @@ fun CompanyScreen(currentUser: User, navController: NavHostController, onLogout:
                 .padding(innerPadding)
         ) {
             composable(BottomNavItem.Offers.route) { CompanyOffersScreen(currentUser, navController) }
-            composable(BottomNavItem.Applications.route) { CompanyApplicationsScreen() }
+            composable(BottomNavItem.Applications.route) { CompanyApplicationsScreen(currentUser, navController) }
             composable(BottomNavItem.Messages.route) { CompanyMessagesScreen() }
             composable(BottomNavItem.Account.route) { CompanyAccountScreen(currentUser, navController, onLogout) }
 
             composable("add_offer") { CompanyOfferCreationScreen(currentUser, navController) }
             composable("offer_details/{offerId}") { CompanyOfferDetailsScreen(navController, it.arguments?.getString("offerId")) }
+            composable("application_details/{applicationId}") { CompanyApplicationDetailsScreen(navController, it.arguments?.getString("applicationId")) }
             composable("account_edition") { CompanyAccountEditionScreen(currentUser, navController, onUpdated) }
         }
     }

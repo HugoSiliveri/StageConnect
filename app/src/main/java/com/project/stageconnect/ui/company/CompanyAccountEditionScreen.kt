@@ -136,7 +136,7 @@ fun CompanyAccountEditionScreen(currentUser: User, navController: NavController,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
-                    onClick = { userViewModel.editUser(currentUser.uid, email, phone, address, currentUser.firstname, currentUser.lastname, structname, description, "") },
+                    onClick = { userViewModel.editUser(currentUser.uid, email, phone, address, currentUser.firstname, currentUser.lastname, structname, description, currentUser.institutionId, currentUser.cvName) },
                     enabled = userState != DataResult.Loading
                 ) {
                     Text(stringResource(R.string.save_modifications))
