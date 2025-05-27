@@ -2,6 +2,7 @@ package com.project.stageconnect.model.repository
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.tasks.await
 
 class AuthRepository {
@@ -11,6 +12,7 @@ class AuthRepository {
     suspend fun login(email: String, password: String): Result<Unit> {
         return try {
             auth.signInWithEmailAndPassword(email, password).await()
+            updateUserToken()
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
@@ -51,6 +53,22 @@ class AuthRepository {
             }
 
             db.collection("users").document(uid).set(userData).await()
+            updateUserToken()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun updateUserToken(): Result<Unit> {
+        return try {
+            val uid = auth.currentUser?.uid ?: return Result.failure(Exception("UID introuvable"))
+            val token = FirebaseMessaging.getInstance().token.await()
+
+            db.collection("users").document(uid)
+                .update("fcmToken", token)
+                .await()
+
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
