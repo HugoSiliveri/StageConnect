@@ -71,4 +71,8 @@
     <string name="select_a_pdf_file">Select a PDF file</string>
     <string name="upload">Upload</string>
     <string name="file_uploaded_successfully">File uploaded successfully</string>
+    <string name="new_application">New application</string>
+    <string name="your_received_a_new_application_to_the_offer">"Your received a new application to the offer "</string>
+    <string name="has_cancelled_his_her_application_to_the_offer">" has cancelled his/her application to the offer "</string>
+    <string name="application_cancelled">Application cancelled</string>
 </resources>

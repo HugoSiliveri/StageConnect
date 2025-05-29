@@ -110,19 +110,19 @@ fun EducationalAccountScreen(currentUser: User, navController: NavController, on
             )
 
             Text(
-                text = "${R.string.email} : ${currentUser.email}",
+                text = "${stringResource(R.string.email)} : ${currentUser.email}",
                 style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Justify),
                 modifier = Modifier.padding(top = 8.dp)
             )
 
             Text(
-                text = "${R.string.phone} : ${currentUser.phone}",
+                text = "${stringResource(R.string.phone)} : ${currentUser.phone}",
                 style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Justify),
                 modifier = Modifier.padding(top = 8.dp)
             )
 
             Text(
-                text = "${R.string.address} : ${currentUser.address}",
+                text = "${stringResource(R.string.address)} : ${currentUser.address}",
                 style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Justify),
                 modifier = Modifier.padding(top = 8.dp)
             )

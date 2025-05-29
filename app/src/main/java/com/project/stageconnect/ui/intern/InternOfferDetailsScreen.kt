@@ -43,6 +43,7 @@ import com.project.stageconnect.model.Application
 import com.project.stageconnect.model.DataResult
 import com.project.stageconnect.model.Internship
 import com.project.stageconnect.model.User
+import com.project.stageconnect.utils.MessagingService
 import com.project.stageconnect.utils.Utils
 import com.project.stageconnect.viewmodel.ApplicationViewModel
 import com.project.stageconnect.viewmodel.InternshipViewModel
@@ -59,6 +60,8 @@ fun InternOfferDetailsScreen(currentUser: User, navController: NavController, of
     var showCancelDialog by remember { mutableStateOf(false) }
     val applicationState by applicationViewModel.applicationState.collectAsState()
     val context = LocalContext.current
+
+    val messagingService = MessagingService()
 
     LaunchedEffect(Unit) {
         internshipViewModel.loadInternship({ internship ->
@@ -153,6 +156,7 @@ fun InternOfferDetailsScreen(currentUser: User, navController: NavController, of
                             TextButton (
                                 onClick = {
                                     applicationViewModel.createApplication(currentUser.uid, internship.id)
+                                    messagingService.sendNotificationToUser(internship.companyId, context.getString(R.string.new_application), context.getString(R.string.your_received_a_new_application_to_the_offer) + internship.title)
                                     showApplyDialog = false
                                 },
                                 enabled = applicationState != DataResult.Loading
@@ -181,6 +185,7 @@ fun InternOfferDetailsScreen(currentUser: User, navController: NavController, of
                             TextButton (
                                 onClick = {
                                     applicationViewModel.cancelApplication(currentUser.uid, internship.id)
+                                    messagingService.sendNotificationToUser(internship.companyId, context.getString(R.string.application_cancelled), currentUser.firstname + " " + currentUser.lastname + context.getString(R.string.has_cancelled_his_her_application_to_the_offer) + internship.title)
                                     showCancelDialog = false
                                 },
                                 enabled = applicationState != DataResult.Loading
