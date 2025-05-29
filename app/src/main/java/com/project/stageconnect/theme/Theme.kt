@@ -32,6 +32,15 @@ private val LightColorScheme = lightColorScheme(
 
 )
 
+/**
+ * Composant de thème personnalisé pour l'application.
+ *
+ * @param darkTheme Si le thème est en mode sombre.
+ * @param dynamicColor Si la couleur dynamique est activée.
+ * @param content Le contenu de l'application.
+ *
+ * @return Le composant de thème personnalisé.
+ */
 @Composable
 fun StageConnectTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),

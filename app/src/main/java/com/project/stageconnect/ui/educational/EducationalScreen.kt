@@ -19,6 +19,16 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.project.stageconnect.R
 import com.project.stageconnect.model.User
 
+/**
+ * Vue qui gère la navigation entre les différentes vues de l'application pour un établissement de formation.
+ *
+ * @param currentUser L'utilisateur actuel.
+ * @param navController Le contrôleur de navigation.
+ * @param onLogout Fonction de déconnexion de l'utilisateur.
+ * @param onUpdated Fonction de mise à jour des informations de l'utilisateur.
+ *
+ * @return La vue qui gère la navigation entre les différentes vues de l'application pour un établissement de formation.
+ */
 @Composable
 fun EducationalScreen(currentUser: User, navController: NavHostController, onLogout: () -> Unit, onUpdated: () -> Unit) {
     val items = listOf(
@@ -71,6 +81,15 @@ fun EducationalScreen(currentUser: User, navController: NavHostController, onLog
     }
 }
 
+/**
+ * Classe représentant les items de la barre de navigation.
+ *
+ * @param route La route de l'item.
+ * @param icon L'icône de l'item.
+ * @param labelRes La ressource de la chaîne de caractères représentant le label de l'item.
+ *
+ * @return La classe représentant les items de la barre de navigation.
+ */
 sealed class BottomNavItem(val route: String, val icon: Int, val labelRes: Int) {
     data object Students : BottomNavItem("students", R.drawable.students, R.string.students)
     data object Messages : BottomNavItem("messages", R.drawable.chat, R.string.messages)

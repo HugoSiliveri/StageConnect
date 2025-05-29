@@ -22,6 +22,15 @@ import com.project.stageconnect.model.DataResult
 import com.project.stageconnect.theme.StageConnectTheme
 import com.project.stageconnect.viewmodel.LoginViewModel
 
+/**
+ * Composant de l'écran de connexion.
+ *
+ * @param viewModel Le modèle de vue de connexion.
+ * @param onLoginSuccess La fonction à appeler lorsque la connexion est réussie.
+ * @param onSignUpClick La fonction à appeler lorsque le bouton "Créer un compte" est cliqué.
+ *
+ * @return Le composant de l'écran de connexion.
+ */
 @Composable
 fun LoginScreen(viewModel: LoginViewModel, onLoginSuccess: () -> Unit, onSignUpClick: () -> Unit) {
     val loginState by viewModel.loginState.collectAsState()

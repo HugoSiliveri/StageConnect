@@ -42,6 +42,15 @@ import com.project.stageconnect.model.User
 import com.project.stageconnect.utils.Utils
 import com.project.stageconnect.viewmodel.UserViewModel
 
+/**
+ * Vue d'édition de compte pour un stagiaire.
+ *
+ * @param currentUser L'utilisateur actuel.
+ * @param navController Le contrôleur de navigation.
+ * @param onUpdated La fonction à appeler lorsque les informations sont mises à jour.
+ *
+ * @return La vue d'édition de compte pour un stagiaire.
+ */
 @Composable
 fun InternAccountEditionScreen(currentUser: User, navController: NavController, onUpdated: () -> Unit) {
 

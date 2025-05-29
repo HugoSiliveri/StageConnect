@@ -38,6 +38,14 @@ import com.project.stageconnect.viewmodel.ApplicationViewModel
 import com.project.stageconnect.viewmodel.InternshipViewModel
 import com.project.stageconnect.viewmodel.UserViewModel
 
+/**
+ * Vue des candidatures d'une entreprise.
+ *
+ * @param currentUser L'utilisateur actuel.
+ * @param navController Le contrôleur de navigation.
+ *
+ * @return La vue des candidatures d'une entreprise.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CompanyApplicationsScreen(currentUser: User, navController: NavHostController) {

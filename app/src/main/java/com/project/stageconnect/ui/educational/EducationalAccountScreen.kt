@@ -31,6 +31,15 @@ import com.project.stageconnect.model.DataResult
 import com.project.stageconnect.model.User
 import com.project.stageconnect.viewmodel.UserViewModel
 
+/**
+ * Vue du compte de l'établissement de formation.
+ *
+ * @param currentUser L'utilisateur actuel.
+ * @param navController Le contrôleur de navigation.
+ * @param onLogout La fonction à appeler lorsque l'utilisateur se déconnecte.
+ *
+ * @return La vue du compte de l'établissement de formation.
+ */
 @Composable
 fun EducationalAccountScreen(currentUser: User, navController: NavController, onLogout: () -> Unit) {
 
@@ -58,13 +67,6 @@ fun EducationalAccountScreen(currentUser: User, navController: NavController, on
                     Text(
                         text = currentUser.structname,
                         style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                    )
-
-                    Text(
-                        text = currentUser.type,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(top = 4.dp)
                     )
                 }
 

@@ -31,6 +31,15 @@ import com.project.stageconnect.model.DataResult
 import com.project.stageconnect.model.User
 import com.project.stageconnect.viewmodel.UserViewModel
 
+/**
+ * Vue du compte de l'entreprise.
+ *
+ * @param currentUser L'utilisateur actuel.
+ * @param navController Le contrôleur de navigation.
+ * @param onLogout La fonction à appeler lorsque l'utilisateur se déconnecte.
+ *
+ * @return La vue du compte de l'entreprise.
+ */
 @Composable
 fun CompanyAccountScreen(currentUser: User, navController: NavController, onLogout: () -> Unit) {
 
@@ -58,13 +67,6 @@ fun CompanyAccountScreen(currentUser: User, navController: NavController, onLogo
                     Text(
                         text = currentUser.structname,
                         style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                    )
-
-                    Text(
-                        text = currentUser.type,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(top = 4.dp)
                     )
                 }
 

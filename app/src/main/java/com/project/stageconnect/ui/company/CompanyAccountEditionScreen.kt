@@ -36,6 +36,15 @@ import com.project.stageconnect.model.DataResult
 import com.project.stageconnect.model.User
 import com.project.stageconnect.viewmodel.UserViewModel
 
+/**
+ * Vue d'édition de compte pour une entreprise.
+ *
+ * @param currentUser L'utilisateur actuel.
+ * @param navController Le contrôleur de navigation.
+ * @param onUpdated La fonction à appeler lorsque les informations sont mises à jour.
+ *
+ * @return La vue d'édition de compte pour une entreprise.
+ */
 @Composable
 fun CompanyAccountEditionScreen(currentUser: User, navController: NavController, onUpdated: () -> Unit) {
 

@@ -48,6 +48,15 @@ import com.project.stageconnect.utils.Utils
 import com.project.stageconnect.viewmodel.ApplicationViewModel
 import com.project.stageconnect.viewmodel.InternshipViewModel
 
+/**
+ * Vue des détails d'une offre de stage.
+ *
+ * @param currentUser L'utilisateur actuel.
+ * @param navController Le contrôleur de navigation.
+ * @param offerId L'identifiant de l'offre de stage.
+ *
+ * @return La vue des détails d'une offre de stage.
+ */
 @Composable
 fun InternOfferDetailsScreen(currentUser: User, navController: NavController, offerId: String?) {
 
@@ -156,7 +165,6 @@ fun InternOfferDetailsScreen(currentUser: User, navController: NavController, of
                             TextButton (
                                 onClick = {
                                     applicationViewModel.createApplication(currentUser.uid, internship.id)
-                                    messagingService.sendNotificationToUser(internship.companyId, context.getString(R.string.new_application), context.getString(R.string.your_received_a_new_application_to_the_offer) + internship.title)
                                     showApplyDialog = false
                                 },
                                 enabled = applicationState != DataResult.Loading
@@ -185,7 +193,6 @@ fun InternOfferDetailsScreen(currentUser: User, navController: NavController, of
                             TextButton (
                                 onClick = {
                                     applicationViewModel.cancelApplication(currentUser.uid, internship.id)
-                                    messagingService.sendNotificationToUser(internship.companyId, context.getString(R.string.application_cancelled), currentUser.firstname + " " + currentUser.lastname + context.getString(R.string.has_cancelled_his_her_application_to_the_offer) + internship.title)
                                     showCancelDialog = false
                                 },
                                 enabled = applicationState != DataResult.Loading
@@ -260,8 +267,14 @@ fun InternOfferDetailsScreen(currentUser: User, navController: NavController, of
 
             if (applicationState == DataResult.Success) {
                 LaunchedEffect(Unit) {
-                    if (application != null) Toast.makeText(context, context.getString(R.string.your_application_has_been_cancelled), Toast.LENGTH_SHORT).show()
-                    else Toast.makeText(context, context.getString(R.string.your_application_has_been_registered), Toast.LENGTH_SHORT).show()
+                    if (application != null) {
+                        messagingService.sendNotificationToUser(internship.companyId, context.getString(R.string.application_cancelled), currentUser.firstname + " " + currentUser.lastname + context.getString(R.string.has_cancelled_his_her_application_to_the_offer) + internship.title)
+                        Toast.makeText(context, context.getString(R.string.your_application_has_been_cancelled), Toast.LENGTH_SHORT).show()
+                    }
+                    else {
+                        messagingService.sendNotificationToUser(internship.companyId, context.getString(R.string.new_application), context.getString(R.string.your_received_a_new_application_to_the_offer) + internship.title)
+                        Toast.makeText(context, context.getString(R.string.your_application_has_been_registered), Toast.LENGTH_SHORT).show()
+                    }
                     navController.navigate("offers")
                 }
             }

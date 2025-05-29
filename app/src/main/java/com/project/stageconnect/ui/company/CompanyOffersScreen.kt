@@ -36,6 +36,14 @@ import com.project.stageconnect.viewmodel.InternshipViewModel
 import com.project.stageconnect.utils.Utils
 import com.project.stageconnect.viewmodel.UserViewModel
 
+/**
+ * Vue des offres d'emploi de l'entreprise.
+ *
+ * @param currentUser L'utilisateur actuel.
+ * @param navController Le contrôleur de navigation.
+ *
+ * @return La vue des offres d'emploi de l'entreprise.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CompanyOffersScreen(currentUser: User, navController: NavController) {

@@ -74,4 +74,13 @@
     <string name="your_received_a_new_application_to_the_offer">"Your received a new application to the offer "</string>
     <string name="has_cancelled_his_her_application_to_the_offer">" has cancelled his/her application to the offer "</string>
     <string name="application_cancelled">Application cancelled</string>
+    <string name="your_application_to_the_offer">"Your application to the offer "</string>
+    <string name="application_accepted">Application accepted</string>
+    <string name="has_been_accepted">" has been accepted"</string>
+    <string name="has_been_denied">" has been denied"</string>
+    <string name="application_denied">Application denied</string>
+    <string name="you_have_accepted_the_application">You have accepted the application</string>
+    <string name="you_have_denied_the_application">You have denied the application</string>
+    <string name="do_you_want_to_accept_this_application">Do you want to accept this application ?</string>
+    <string name="do_you_want_to_deny_this_application">Do you want to deny this application ?</string>
 </resources>

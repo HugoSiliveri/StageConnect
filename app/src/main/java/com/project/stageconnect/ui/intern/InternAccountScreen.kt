@@ -1,6 +1,5 @@
 package com.project.stageconnect.ui.intern
 
-import android.graphics.drawable.Icon
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -37,6 +36,15 @@ import com.project.stageconnect.model.DataResult
 import com.project.stageconnect.model.User
 import com.project.stageconnect.viewmodel.UserViewModel
 
+/**
+ * Vue du compte d'un stagiaire.
+ *
+ * @param currentUser L'utilisateur actuel.
+ * @param navController Le contrôleur de navigation.
+ * @param onLogout La fonction à appeler lorsque l'utilisateur se déconnecte.
+ *
+ * @return La vue du compte d'un stagiaire.
+ */
 @Composable
 fun InternAccountScreen(currentUser: User, navController: NavController, onLogout: () -> Unit) {
 
@@ -79,13 +87,6 @@ fun InternAccountScreen(currentUser: User, navController: NavController, onLogou
                             modifier = Modifier.padding(start = 6.dp),
                         )
                     }
-
-                    Text(
-                        text = currentUser.type,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
                 }
 
                 Row {

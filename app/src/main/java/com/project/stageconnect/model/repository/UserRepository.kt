@@ -12,14 +12,32 @@ import com.project.stageconnect.model.User
 import kotlinx.coroutines.tasks.await
 import java.io.File
 
+/**
+ * Repository responsable des utilisateurs (`User`) dans Firestore.
+ *
+ * @property auth Instance de FirebaseAuth.
+ */
 class UserRepository {
     private val auth = FirebaseAuth.getInstance()
     private val db = Firebase.firestore
 
+    /**
+     * Récupère l'ID de l'utilisateur actuellement connecté.
+     *
+     * @return L'ID de l'utilisateur ou `null` si non connecté.
+     */
     fun getCurrentUserId(): String? {
         return auth.currentUser?.uid
     }
 
+    /**
+     * Récupère les informations d'un utilisateur par son ID.
+     *
+     * @param uid L'ID de l'utilisateur.
+     * @param onResult Callback contenant les informations de l'utilisateur ou `null` si non trouvé.
+     *
+     * @return Un résultat indiquant si la récupération a réussi ou non.
+     */
     fun getUser(uid: String, onResult: (User?) -> Unit) {
         db.collection("users").document(uid).get()
             .addOnSuccessListener { document ->
@@ -34,6 +52,14 @@ class UserRepository {
             }
     }
 
+    /**
+     * Récupère les informations de plusieurs utilisateurs par leurs ID.
+     *
+     * @param userIds Liste des ID d'utilisateurs.
+     * @param onResult Callback avec la liste des utilisateurs.
+     *
+     * @return Un résultat indiquant si la récupération a réussi ou non.
+     */
     fun getUsers(userIds: List<String>, onResult: (List<User>) -> Unit) {
 
         val chunkedIds = userIds.chunked(10)
@@ -62,6 +88,13 @@ class UserRepository {
         }
     }
 
+    /**
+     * Récupère toutes les établissements.
+     *
+     * @param onResult Callback avec la liste des établissements.
+     *
+     * @return Un résultat indiquant si la récupération a réussi ou non.
+     */
     fun getEducationalInstitutions(onResult: (List<User>) -> Unit) {
         db.collection("users").whereEqualTo("type", "educational").get()
             .addOnSuccessListener { result ->
@@ -77,6 +110,22 @@ class UserRepository {
             }
     }
 
+    /**
+     * Met à jour les informations d'un utilisateur.
+     *
+     * @param uid L'ID de l'utilisateur.
+     * @param email L'adresse e-mail de l'utilisateur.
+     * @param phone Le numéro de téléphone de l'utilisateur.
+     * @param address L'adresse de l'utilisateur.
+     * @param firstname Le prénom de l'utilisateur (pour les étudiants).
+     * @param lastname Le nom de famille de l'utilisateur (pour les étudiants).
+     * @param structname Le nom de l'entreprise ou de l'établissement (pour les entreprises et établissements).
+     * @param description La description de l'utilisateur.
+     * @param institutionId L'identifiant de l'établissement de l'utilisateur (pour les étudiants).
+     * @param cvName Le nom du fichier CV de l'utilisateur.
+     *
+     * @return Un résultat indiquant si la mise à jour a réussi ou non.
+     */
     suspend fun editUser(
         uid: String,
         email: String,
@@ -109,6 +158,11 @@ class UserRepository {
         }
     }
 
+    /**
+     * Déconnecte l'utilisateur.
+     *
+     * @return Un résultat indiquant si la déconnexion a réussi ou non.
+     */
     fun signOut(): Result<Unit> {
         return try {
             auth.signOut()
@@ -118,6 +172,16 @@ class UserRepository {
         }
     }
 
+    /**
+     * Upload un CV d'un utilisateur dans Firebase Storage.
+     *
+     * @param userId L'ID de l'utilisateur.
+     * @param fileName Le nom du fichier CV.
+     * @param fileUri L'URI du fichier CV.
+     * @param onResult Callback avec le résultat de l'opération.
+     *
+     * @return Un résultat indiquant si l'envoi a réussi ou non.
+     */
     fun uploadCv(userId: String, fileName: String, fileUri: Uri, onResult: (Unit?) -> Unit = {}) {
         val storageRef = FirebaseStorage.getInstance().reference.child("users/${userId}/cv/${fileName}")
 
@@ -129,6 +193,17 @@ class UserRepository {
             }
     }
 
+
+    /**
+     * Récupère un CV d'un utilisateur spécifique.
+     *
+     * @param userId L'ID de l'utilisateur.
+     * @param fileName Le nom du fichier CV.
+     * @param context Le contexte de l'application.
+     * @param onResult Callback avec le résultat de l'opération.
+     *
+     * @return Un résultat indiquant si la récupération a réussi ou non.
+     */
     fun fetchCv(userId: String, fileName: String, context: Context, onResult: (Unit?) -> Unit = {}) {
         val storageRef = FirebaseStorage.getInstance().reference.child("users/${userId}/cv/${fileName}")
         val localFile = File(context.cacheDir, fileName)

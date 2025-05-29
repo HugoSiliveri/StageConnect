@@ -8,7 +8,6 @@ import android.graphics.Color
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -39,6 +38,10 @@ import com.project.stageconnect.viewmodel.LoginViewModel
 import com.project.stageconnect.viewmodel.SignupViewModel
 import com.project.stageconnect.viewmodel.UserViewModel
 
+/**
+ * Activité principale de l'application.
+ *
+ */
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,6 +69,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+/**
+ * Composant de navigation de l'application.
+ *
+ * @return Le composant de navigation.
+ */
 @SuppressLint("ViewModelConstructorInComposable")
 @Composable
 fun AppNavigation() {

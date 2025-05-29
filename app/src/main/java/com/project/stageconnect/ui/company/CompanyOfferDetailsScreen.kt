@@ -38,6 +38,14 @@ import com.project.stageconnect.utils.Utils
 import com.project.stageconnect.viewmodel.ApplicationViewModel
 import com.project.stageconnect.viewmodel.InternshipViewModel
 
+/**
+ * Vue des détails d'une offre de stage.
+ *
+ * @param navController Le contrôleur de navigation.
+ * @param offerId L'identifiant de l'offre de stage.
+ *
+ * @return La vue des détails d'une offre de stage.
+ */
 @Composable
 fun CompanyOfferDetailsScreen(navController: NavController, offerId: String?) {
 

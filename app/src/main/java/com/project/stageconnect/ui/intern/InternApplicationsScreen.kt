@@ -38,6 +38,14 @@ import com.project.stageconnect.model.User
 import com.project.stageconnect.utils.Utils
 import com.project.stageconnect.viewmodel.InternshipViewModel
 
+/**
+ * Vue des candidatures d'un stagiaire.
+ *
+ * @param currentUser L'utilisateur actuel.
+ * @param navController Le contrôleur de navigation.
+ *
+ * @return La vue des candidatures d'un stagiaire.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InternApplicationsScreen(currentUser: User, navController: NavHostController) {

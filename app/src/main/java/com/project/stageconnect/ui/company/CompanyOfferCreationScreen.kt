@@ -20,6 +20,14 @@ import com.project.stageconnect.model.DataResult
 import com.project.stageconnect.model.User
 import com.project.stageconnect.viewmodel.InternshipViewModel
 
+/**
+ * Vue de création d'une offre de stage.
+ *
+ * @param currentUser L'utilisateur actuel.
+ * @param navController Le contrôleur de navigation.
+ *
+ * @return La vue de création d'une offre de stage.
+ */
 @Composable
 fun CompanyOfferCreationScreen(currentUser: User, navController: NavController) {
     var title by remember { mutableStateOf("") }

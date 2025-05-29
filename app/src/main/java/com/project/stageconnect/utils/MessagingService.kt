@@ -17,8 +17,16 @@ import com.google.firebase.messaging.RemoteMessage
 import com.project.stageconnect.MainActivity
 import com.project.stageconnect.R
 
+/**
+ * Service de gestion des notifications Firebase.
+ */
 class MessagingService : FirebaseMessagingService() {
 
+    /**
+     * Gère le cas où un nouveau token est obtenu.
+     *
+     * @param token Le nouveau token.
+     */
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         val uid = FirebaseAuth.getInstance().currentUser?.uid
@@ -29,12 +37,23 @@ class MessagingService : FirebaseMessagingService() {
         }
     }
 
+    /**
+     * Gère le cas où une notification est reçue.
+     *
+     * @param message La notification reçue.
+     */
     override fun onMessageReceived(message: RemoteMessage) {
         message.notification?.let {
             showNotification(it.title.toString(), it.body.toString())
         }
     }
 
+    /**
+     * Affiche une notification.
+     *
+     * @param title Le titre de la notification.
+     * @param body Le corps de la notification.
+     */
     private fun showNotification(title: String, body: String) {
         val channelId = "default_channel"
         val channelName = "Notifications StageConnect"
@@ -79,6 +98,13 @@ class MessagingService : FirebaseMessagingService() {
         notificationManager.notify(0, notificationBuilder.build())
     }
 
+    /**
+     * Envoie une notification à un utilisateur spécifique grâce à une fonction FirebaseFunctions.
+     *
+     * @param userId L'ID de l'utilisateur.
+     * @param title Le titre de la notification.
+     * @param body Le corps de la notification.
+     */
     fun sendNotificationToUser(userId: String, title: String, body: String) {
         val data = hashMapOf(
             "uid" to userId,

@@ -1,6 +1,5 @@
 package com.project.stageconnect.ui.auth
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -26,6 +25,15 @@ import com.project.stageconnect.theme.StageConnectTheme
 import com.project.stageconnect.viewmodel.SignupViewModel
 import com.project.stageconnect.viewmodel.UserViewModel
 
+/**
+ * Composant de l'écran de création de compte.
+ *
+ * @param viewModel Le modèle de vue de création de compte.
+ * @param onSignupSuccess La fonction à appeler lorsque la création de compte est réussie.
+ * @param onLoginClick La fonction à appeler lorsque le bouton "Se connecter" est cliqué.
+ *
+ * @return Le composant de l'écran de création de compte.
+ */
 @Composable
 fun SignupScreen(viewModel: SignupViewModel, onSignupSuccess: () -> Unit, onLoginClick: () -> Unit) {
     val signupState by viewModel.signupState.collectAsState()

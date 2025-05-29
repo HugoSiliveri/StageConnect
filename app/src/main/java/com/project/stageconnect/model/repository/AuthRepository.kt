@@ -5,10 +5,24 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.tasks.await
 
+/**
+ * Repository responsable de l'authentification dans Firebase.
+ *
+ * @property auth Instance de FirebaseAuth.
+ * @property db Instance de FirebaseFirestore.
+ */
 class AuthRepository {
     private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
 
+    /**
+     * Effectue la connexion de l'utilisateur.
+     *
+     * @param email L'adresse e-mail de l'utilisateur.
+     * @param password Le mot de passe de l'utilisateur.
+     *
+     * @return Un résultat indiquant si la connexion a réussi ou non.
+     */
     suspend fun login(email: String, password: String): Result<Unit> {
         return try {
             auth.signInWithEmailAndPassword(email, password).await()
@@ -19,7 +33,22 @@ class AuthRepository {
         }
     }
 
-     suspend fun signupUser(
+    /**
+     * Effectue la déconnexion de l'utilisateur.
+     *
+     * @param typeKey La clé du type d'utilisateur ("intern", "company", "educational").
+     * @param email L'adresse e-mail de l'utilisateur.
+     * @param password Le mot de passe de l'utilisateur.
+     * @param firstname Le prénom de l'utilisateur (pour les étudiants).
+     * @param lastname Le nom de famille de l'utilisateur (pour les étudiants).
+     * @param name Le nom de l'entreprise ou de l'établissement (pour les entreprises et établissements).
+     * @param phone Le numéro de téléphone de l'utilisateur.
+     * @param address L'adresse de l'utilisateur.
+     * @param institutionId L'identifiant de l'établissement de l'utilisateur (pour les étudiants).
+     *
+     * @return Un résultat indiquant si la déconnexion a réussi ou non.
+     */
+    suspend fun signupUser(
         typeKey: String,
         email: String,
         password: String,
@@ -60,13 +89,20 @@ class AuthRepository {
         }
     }
 
+    /**
+     * Met à jour le token FCM de l'utilisateur.
+     *
+     * @return Un résultat indiquant si la mise à jour a réussi ou non.
+     */
     suspend fun updateUserToken(): Result<Unit> {
         return try {
             val uid = auth.currentUser?.uid ?: return Result.failure(Exception("UID introuvable"))
-            val token = FirebaseMessaging.getInstance().token.await()
+            FirebaseMessaging.getInstance().deleteToken().await()
+
+            val newToken = FirebaseMessaging.getInstance().token.await()
 
             db.collection("users").document(uid)
-                .update("fcmToken", token)
+                .update("fcmToken", newToken)
                 .await()
 
             Result.success(Unit)
