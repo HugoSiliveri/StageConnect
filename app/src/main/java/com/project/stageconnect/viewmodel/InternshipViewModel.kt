@@ -10,121 +10,58 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 /**
- * ViewModel responsable des données en lien avec les offres de stage (`Internship`).
+ * ViewModel responsable des données en lien avec les stages (`Internship`).
  *
- * @property internshipRepository Repository des offres de stage.
- * @property _internshipState Etat des offres de stage.
- * @property internshipState Etat des offres de stage sous forme de StateFlow.
+ * @property internshipRepository Repository des stages.
+ * @property _internshipState Etat des stages.
+ * @property internshipState Etat des stages sous forme de StateFlow.
  */
 class InternshipViewModel : ViewModel() {
 
     private val internshipRepository = InternshipRepository()
-
     private val _internshipState = MutableStateFlow<DataResult>(DataResult.Idle)
     val internshipState: StateFlow<DataResult> = _internshipState
 
     /**
-     * Charge les informations d'une offre de stage spécifique.
+     * Charge les détails d'un stage spécifique.
      *
-     * @param onInternshipLoaded Callback avec l'offre de stage chargée.
-     * @param internshipId L'identifiant de l'offre de stage.
+     * @param onInternshipLoaded Callback avec le stage chargé.
+     * @param internshipId L'identifiant du stage.
      *
      * @return Un résultat indiquant si la récupération a réussi ou non.
      */
-    fun loadInternship(onInternshipLoaded: (Internship?) -> Unit, internshipId: String) {
+    fun loadInternship(onInternshipLoaded: (Internship) -> Unit, internshipId: String) {
         internshipRepository.getInternship(internshipId) { internship ->
             onInternshipLoaded(internship)
         }
     }
 
     /**
-     * Charge les offres de stage disponibles.
+     * Charge les stages associés aux étudiants.
      *
-     * @param onInternshipsLoaded Callback avec la liste des offres de stage.
+     * @param onInternshipsLoaded Callback avec la liste des stages.
+     * @param userIds Liste des identifiants des étudiants.
      *
      * @return Un résultat indiquant si la récupération a réussi ou non.
      */
-    fun loadNoApplicationInternships(onInternshipsLoaded: (List<Internship>) -> Unit, userId: String) {
-        internshipRepository.getNoApplicationInternships(userId) { list ->
+    fun loadUsersInternships(onInternshipsLoaded: (List<Internship>) -> Unit = {}, userIds: List<String>) {
+        internshipRepository.getUsersInternships(userIds) { list ->
             onInternshipsLoaded(list)
         }
     }
 
     /**
-     * Charge les offres de stage d'une entreprise spécifique.
+     * Crée un nouveau stage pour un utilisateur et une offre de stage spécifique.
      *
-     * @param onInternshipsLoaded Callback avec la liste des offres de stage.
-     * @param companyId L'identifiant de l'entreprise.
-     */
-    fun loadCompanyInternships(onInternshipsLoaded: (List<Internship>) -> Unit, companyId: String) {
-        internshipRepository.getCompanyInternships(companyId) { list ->
-            onInternshipsLoaded(list)
-        }
-    }
-
-    /**
-     * Charge les offres de stage auxquelles l'utilisateur est déjà inscris.
-     *
-     * @param onInternshipsLoaded Callback avec la liste des offres de stage.
+     * @param offerId L'identifiant de l'offre de stage.
      * @param userId L'identifiant de l'utilisateur.
-     *
-     * @return Un résultat indiquant si la récupération a réussi ou non.
-     */
-    fun loadApplicationInternships(onInternshipsLoaded: (List<Internship>) -> Unit, userId: String) {
-        internshipRepository.getApplicationInternships(userId) { list ->
-            onInternshipsLoaded(list)
-        }
-    }
-
-    /**
-     * Crée une nouvelle offre de stage pour une entreprise spécifique.
-     *
-     * @param companyId L'identifiant de l'entreprise.
-     * @param companyName Le nom de l'entreprise.
-     * @param title Le titre de l'offre de stage.
-     * @param description La description de l'offre de stage.
-     * @param location La localisation de l'offre de stage.
-     * @param duration La durée de l'offre de stage.
      *
      * @return Un résultat indiquant si la création a réussi ou non.
      */
-    fun createInternship(
-        companyId: String,
-        companyName: String,
-        title: String,
-        description: String,
-        location: String,
-        duration: String
-    ) {
+    fun createInternship(offerId: String, userId: String) {
         viewModelScope.launch {
             _internshipState.value = DataResult.Loading
-            val result = internshipRepository.createInternship(
-                companyId,
-                companyName,
-                title,
-                description,
-                location,
-                duration
-            )
-            _internshipState.value = if (result.isSuccess) {
-                DataResult.Success
-            } else {
-                DataResult.Error(result.exceptionOrNull()?.message ?: "Erreur inconnue")
-            }
-        }
-    }
-
-    /**
-     * Supprime une offre de stage spécifique.
-     *
-     * @param internshipId L'identifiant de l'offre de stage.
-     *
-     * @return Un résultat indiquant si la suppression a réussi ou non.
-     */
-    fun deleteInternship(internshipId: String){
-        viewModelScope.launch {
-            _internshipState.value = DataResult.Loading
-            val result = internshipRepository.deleteInternship(internshipId)
+            val result = internshipRepository.createInternship(offerId, userId)
             _internshipState.value = if (result.isSuccess) {
                 DataResult.Success
             } else {

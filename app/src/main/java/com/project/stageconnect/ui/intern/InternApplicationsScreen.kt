@@ -33,10 +33,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.project.stageconnect.R
-import com.project.stageconnect.model.Internship
+import com.project.stageconnect.model.Offer
 import com.project.stageconnect.model.User
 import com.project.stageconnect.utils.Utils
-import com.project.stageconnect.viewmodel.InternshipViewModel
+import com.project.stageconnect.viewmodel.OfferViewModel
 
 /**
  * Vue des candidatures d'un stagiaire.
@@ -52,12 +52,12 @@ fun InternApplicationsScreen(currentUser: User, navController: NavHostController
     var searchQuery by remember { mutableStateOf("") }
     var isActive by remember { mutableStateOf(false) }
 
-    val internshipViewModel: InternshipViewModel = viewModel()
+    val offerViewModel: OfferViewModel = viewModel()
 
-    var offers by remember { mutableStateOf<List<Internship>>(emptyList()) }
+    var offers by remember { mutableStateOf<List<Offer>>(emptyList()) }
 
     LaunchedEffect(Unit) {
-        internshipViewModel.loadApplicationInternships({ list ->
+        offerViewModel.loadApplicationOffers({ list ->
             offers = list
         }, currentUser.uid)
     }

@@ -32,7 +32,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -44,11 +43,12 @@ import androidx.navigation.NavHostController
 import com.project.stageconnect.R
 import com.project.stageconnect.model.Application
 import com.project.stageconnect.model.DataResult
-import com.project.stageconnect.model.Internship
+import com.project.stageconnect.model.Offer
 import com.project.stageconnect.model.User
 import com.project.stageconnect.utils.MessagingService
 import com.project.stageconnect.viewmodel.ApplicationViewModel
 import com.project.stageconnect.viewmodel.InternshipViewModel
+import com.project.stageconnect.viewmodel.OfferViewModel
 import com.project.stageconnect.viewmodel.UserViewModel
 
 /**
@@ -65,12 +65,13 @@ fun CompanyApplicationDetailsScreen(navController: NavHostController, applicatio
     val userViewModel: UserViewModel = viewModel()
     val applicationViewModel: ApplicationViewModel = viewModel()
     val internshipViewModel: InternshipViewModel = viewModel()
+    val offerViewModel: OfferViewModel = viewModel()
     val context = LocalContext.current
     val messagingService = MessagingService()
 
     var userInstitution by remember { mutableStateOf<User?>(null) }
     var application by remember { mutableStateOf<Application?>(null) }
-    var internship by remember { mutableStateOf<Internship?>(null) }
+    var offer by remember { mutableStateOf<Offer?>(null) }
     var user by remember { mutableStateOf<User?>(null) }
     var showAcceptDialog by remember { mutableStateOf(false) }
     var showDenyDialog by remember { mutableStateOf(false) }
@@ -90,9 +91,9 @@ fun CompanyApplicationDetailsScreen(navController: NavHostController, applicatio
                     }
                 }, app.userId)
 
-                internshipViewModel.loadInternship({ isp ->
-                    internship = isp
-                }, app.internshipId)
+                offerViewModel.loadOffer({ off ->
+                    offer = off
+                }, app.offerId)
                 application = app
             }
         }, applicationId)
@@ -148,6 +149,7 @@ fun CompanyApplicationDetailsScreen(navController: NavHostController, applicatio
                                 TextButton (
                                     onClick = {
                                         applicationViewModel.acceptApplication(application?.id ?: "")
+                                        internshipViewModel.createInternship(offer?.id.toString(), candidate.uid)
                                         showAcceptDialog = false
                                     },
                                     enabled = applicationState != DataResult.Loading
@@ -208,12 +210,13 @@ fun CompanyApplicationDetailsScreen(navController: NavHostController, applicatio
                     if (applicationState == DataResult.Success) {
                         LaunchedEffect(Unit) {
                             if (application != null) {
-                                messagingService.sendNotificationToUser(candidate.uid, context.getString(R.string.application_denied), context.getString(R.string.your_application_to_the_offer) + internship?.title  + context.getString(R.string.has_been_denied))
-                                Toast.makeText(context, context.getString(R.string.you_have_denied_the_application), Toast.LENGTH_SHORT).show()
+                                messagingService.sendNotificationToUser(candidate.uid, context.getString(R.string.application_accepted), context.getString(R.string.your_application_to_the_offer) + offer?.title  + context.getString(R.string.has_been_accepted))
+                                Toast.makeText(context, context.getString(R.string.you_have_accepted_the_application), Toast.LENGTH_SHORT).show()
+
                             }
                             else {
-                                messagingService.sendNotificationToUser(candidate.uid, context.getString(R.string.application_accepted), context.getString(R.string.your_application_to_the_offer) + internship?.title  + context.getString(R.string.has_been_accepted))
-                                Toast.makeText(context, context.getString(R.string.you_have_accepted_the_application), Toast.LENGTH_SHORT).show()
+                                messagingService.sendNotificationToUser(candidate.uid, context.getString(R.string.application_denied), context.getString(R.string.your_application_to_the_offer) + offer?.title  + context.getString(R.string.has_been_denied))
+                                Toast.makeText(context, context.getString(R.string.you_have_denied_the_application), Toast.LENGTH_SHORT).show()
                             }
                             navController.navigate("offers")
                         }

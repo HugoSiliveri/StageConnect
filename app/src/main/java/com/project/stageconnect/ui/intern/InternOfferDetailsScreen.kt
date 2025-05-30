@@ -41,12 +41,12 @@ import androidx.navigation.NavController
 import com.project.stageconnect.R
 import com.project.stageconnect.model.Application
 import com.project.stageconnect.model.DataResult
-import com.project.stageconnect.model.Internship
+import com.project.stageconnect.model.Offer
 import com.project.stageconnect.model.User
 import com.project.stageconnect.utils.MessagingService
 import com.project.stageconnect.utils.Utils
 import com.project.stageconnect.viewmodel.ApplicationViewModel
-import com.project.stageconnect.viewmodel.InternshipViewModel
+import com.project.stageconnect.viewmodel.OfferViewModel
 
 /**
  * Vue des détails d'une offre de stage.
@@ -60,9 +60,9 @@ import com.project.stageconnect.viewmodel.InternshipViewModel
 @Composable
 fun InternOfferDetailsScreen(currentUser: User, navController: NavController, offerId: String?) {
 
-    val internshipViewModel: InternshipViewModel = viewModel()
+    val offerViewModel: OfferViewModel = viewModel()
     val applicationViewModel: ApplicationViewModel = viewModel()
-    var offer by remember { mutableStateOf<Internship?>(null) }
+    var offer by remember { mutableStateOf<Offer?>(null) }
     var application by remember { mutableStateOf<Application?>(null) }
 
     var showApplyDialog by remember { mutableStateOf(false) }
@@ -73,11 +73,11 @@ fun InternOfferDetailsScreen(currentUser: User, navController: NavController, of
     val messagingService = MessagingService()
 
     LaunchedEffect(Unit) {
-        internshipViewModel.loadInternship({ internship ->
-            offer = internship
+        offerViewModel.loadOffer({ off ->
+            offer = off
         }, offerId ?: "")
 
-        applicationViewModel.loadApplicationByUserAndInternship({ app ->
+        applicationViewModel.loadApplicationByUserAndOffer({ app ->
             application = app
         }, currentUser.uid, offerId ?: "")
     }
@@ -93,20 +93,20 @@ fun InternOfferDetailsScreen(currentUser: User, navController: NavController, of
             Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "")
         }
 
-        offer?.let { internship ->
+        offer?.let { offer ->
             Column(modifier = Modifier
                 .fillMaxSize()
             ) {
 
                 Text(
-                    text = internship.title,
+                    text = offer.title,
                     style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
                     modifier = Modifier
                         .padding(top = 16.dp)
                 )
 
                 Text(
-                    text = "${internship.companyName} | ${Utils.extractPostalCodeAndCity(internship.location)}",
+                    text = "${offer.companyName} | ${Utils.extractPostalCodeAndCity(offer.location)}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = 4.dp, bottom = 16.dp)
@@ -119,9 +119,11 @@ fun InternOfferDetailsScreen(currentUser: User, navController: NavController, of
                         }
                     }
                 } else {
-                    Row {
-                        Button(onClick = { showCancelDialog = true }) {
-                            Text(stringResource(R.string.cancel))
+                    if (application?.status == "pending"){
+                        Row {
+                            Button(onClick = { showCancelDialog = true }) {
+                                Text(stringResource(R.string.cancel))
+                            }
                         }
                     }
                     Row (
@@ -164,7 +166,7 @@ fun InternOfferDetailsScreen(currentUser: User, navController: NavController, of
                         confirmButton = {
                             TextButton (
                                 onClick = {
-                                    applicationViewModel.createApplication(currentUser.uid, internship.id)
+                                    applicationViewModel.createApplication(currentUser.uid, offer.id)
                                     showApplyDialog = false
                                 },
                                 enabled = applicationState != DataResult.Loading
@@ -192,7 +194,7 @@ fun InternOfferDetailsScreen(currentUser: User, navController: NavController, of
                         confirmButton = {
                             TextButton (
                                 onClick = {
-                                    applicationViewModel.cancelApplication(currentUser.uid, internship.id)
+                                    applicationViewModel.cancelApplication(currentUser.uid, offer.id)
                                     showCancelDialog = false
                                 },
                                 enabled = applicationState != DataResult.Loading
@@ -223,7 +225,7 @@ fun InternOfferDetailsScreen(currentUser: User, navController: NavController, of
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
                 )
                 Text(
-                    text = internship.description,
+                    text = offer.description,
                     style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Justify),
                     modifier = Modifier.padding(top = 8.dp)
                 )
@@ -237,7 +239,7 @@ fun InternOfferDetailsScreen(currentUser: User, navController: NavController, of
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
                 )
                 Text(
-                    text = internship.location,
+                    text = offer.location,
                     style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Justify),
                     modifier = Modifier.padding(top = 8.dp)
                 )
@@ -251,7 +253,7 @@ fun InternOfferDetailsScreen(currentUser: User, navController: NavController, of
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
                 )
                 Text(
-                    text = internship.duration,
+                    text = offer.duration,
                     style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Justify),
                     modifier = Modifier.padding(top = 8.dp)
                 )
@@ -268,11 +270,11 @@ fun InternOfferDetailsScreen(currentUser: User, navController: NavController, of
             if (applicationState == DataResult.Success) {
                 LaunchedEffect(Unit) {
                     if (application != null) {
-                        messagingService.sendNotificationToUser(internship.companyId, context.getString(R.string.application_cancelled), currentUser.firstname + " " + currentUser.lastname + context.getString(R.string.has_cancelled_his_her_application_to_the_offer) + internship.title)
+                        messagingService.sendNotificationToUser(offer.companyId, context.getString(R.string.application_cancelled), currentUser.firstname + " " + currentUser.lastname + context.getString(R.string.has_cancelled_his_her_application_to_the_offer) + offer.title)
                         Toast.makeText(context, context.getString(R.string.your_application_has_been_cancelled), Toast.LENGTH_SHORT).show()
                     }
                     else {
-                        messagingService.sendNotificationToUser(internship.companyId, context.getString(R.string.new_application), context.getString(R.string.your_received_a_new_application_to_the_offer) + internship.title)
+                        messagingService.sendNotificationToUser(offer.companyId, context.getString(R.string.new_application), context.getString(R.string.your_received_a_new_application_to_the_offer) + offer.title)
                         Toast.makeText(context, context.getString(R.string.your_application_has_been_registered), Toast.LENGTH_SHORT).show()
                     }
                     navController.navigate("offers")

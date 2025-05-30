@@ -63,7 +63,7 @@ fun EducationalAccountScreen(currentUser: User, navController: NavController, on
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column (modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) {
+                Column (modifier = Modifier.weight(1f).padding(end = 8.dp)) {
                     Text(
                         text = currentUser.structname,
                         style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),

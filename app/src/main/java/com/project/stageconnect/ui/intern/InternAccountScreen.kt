@@ -74,7 +74,7 @@ fun InternAccountScreen(currentUser: User, navController: NavController, onLogou
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column (modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)) {
+                Column (modifier = Modifier.weight(1f).padding(end = 8.dp)) {
                     Row {
                         Text(
                             text = currentUser.firstname,

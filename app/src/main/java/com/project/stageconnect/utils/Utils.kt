@@ -26,7 +26,7 @@ class Utils {
                 // matchResult.groupValues[1] = code postal, matchResult.groupValues[2] = ville
                 "${matchResult.groupValues[1]} ${matchResult.groupValues[2]}"
             } else {
-                "Localisation non valide"
+                location
             }
         }
 

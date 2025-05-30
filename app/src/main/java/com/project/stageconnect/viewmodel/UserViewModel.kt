@@ -88,6 +88,20 @@ class UserViewModel : ViewModel() {
     }
 
     /**
+     * Charge les étudiants (`student`) de l'établissement spécifié.
+     *
+     * @param onStudentsLoaded Callback avec la liste des étudiants.
+     * @param institutionId L'ID de l'établissement.
+     *
+     * @return Un résultat indiquant si le chargement a réussi ou non.
+     */
+    fun loadStudents(onStudentsLoaded: (List<User>) -> Unit = {}, institutionId: String) {
+        userRepository.getStudents(institutionId) { list ->
+            onStudentsLoaded(list)
+        }
+    }
+
+    /**
      * Met à jour les informations d'un utilisateur.
      *
      * @param uid L'ID de l'utilisateur.

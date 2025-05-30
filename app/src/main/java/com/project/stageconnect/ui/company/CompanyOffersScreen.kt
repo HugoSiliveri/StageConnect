@@ -30,11 +30,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.project.stageconnect.R
-import com.project.stageconnect.model.Internship
+import com.project.stageconnect.model.Offer
 import com.project.stageconnect.model.User
-import com.project.stageconnect.viewmodel.InternshipViewModel
+import com.project.stageconnect.viewmodel.OfferViewModel
 import com.project.stageconnect.utils.Utils
-import com.project.stageconnect.viewmodel.UserViewModel
 
 /**
  * Vue des offres d'emploi de l'entreprise.
@@ -50,12 +49,12 @@ fun CompanyOffersScreen(currentUser: User, navController: NavController) {
     var searchQuery by remember { mutableStateOf("") }
     var isActive by remember { mutableStateOf(false) }
 
-    val internshipViewModel: InternshipViewModel = viewModel()
+    val offerViewModel: OfferViewModel = viewModel()
 
-    var offers by remember { mutableStateOf<List<Internship>>(emptyList()) }
+    var offers by remember { mutableStateOf<List<Offer>>(emptyList()) }
 
     LaunchedEffect(Unit) {
-        internshipViewModel.loadCompanyInternships({ list ->
+        offerViewModel.loadCompanyOffers({ list ->
             offers = list
         }, currentUser.uid)
     }

@@ -1,22 +1,20 @@
 package com.project.stageconnect.model
 
 /**
- * Modèle de données pour une offre de stage.
+ * Modèle de données pour un stage.
  *
- * @property id L'identifiant unique de l'offre de stage.
- * @property companyId L'identifiant de l'entreprise ayant créé l'offre.
- * @property companyName Le nom de l'entreprise ayant créé l'offre.
- * @property title Le titre de l'offre de stage.
- * @property description La description de l'offre de stage.
- * @property location La localisation du stage.
- * @property duration La durée du stage.
+ * @property id L'identifiant unique du stage.
+ * @property offerId L'identifiant de l'offre de stage concernée.
+ * @property userId L'identifiant de l'utilisateur ayant effectué le stage.
+ * @property status Le statut du stage (not_started, in_progress, finished).
+ * @property step Progression dans le processus de création de la convention du stage (utilisé quand status = not_started).
+ * @property agreementName Nom du fichier de la convention du stage.
  */
-data class Internship(
+data class Internship (
     var id: String = "",
-    var companyId: String = "",
-    var companyName: String = "",
-    var title: String = "",
-    var description: String = "",
-    var location: String = "",
-    var duration: String = ""
+    var offerId: String = "",
+    var userId: String = "",
+    var status: String = "",
+    var step: Int = 0,
+    var agreementName: String = "",
 )

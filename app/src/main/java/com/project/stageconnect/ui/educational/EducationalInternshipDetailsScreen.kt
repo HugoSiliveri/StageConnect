@@ -1,14 +1,17 @@
-package com.project.stageconnect.ui.company
+package com.project.stageconnect.ui.educational
 
 import android.widget.Toast
-import com.project.stageconnect.R
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalIconButton
@@ -19,64 +22,78 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.project.stageconnect.R
 import com.project.stageconnect.model.DataResult
+import com.project.stageconnect.model.Internship
 import com.project.stageconnect.model.Offer
+import com.project.stageconnect.model.User
 import com.project.stageconnect.utils.Utils
-import com.project.stageconnect.viewmodel.ApplicationViewModel
+import com.project.stageconnect.viewmodel.InternshipViewModel
 import com.project.stageconnect.viewmodel.OfferViewModel
+import com.project.stageconnect.viewmodel.UserViewModel
 
 /**
- * Vue des détails d'une offre de stage.
+ * Vue des détails d'un stage associé à un étudiant.
  *
+ * @param currentUser L'utilisateur actuel.
  * @param navController Le contrôleur de navigation.
- * @param offerId L'identifiant de l'offre de stage.
- *
- * @return La vue des détails d'une offre de stage.
+ * @param internshipId L'identifiant du stage.
  */
 @Composable
-fun CompanyOfferDetailsScreen(navController: NavController, offerId: String?) {
-
+fun EducationalInternshipDetailsScreen(currentUser: User, navController: NavController, internshipId: String?) {
     val offerViewModel: OfferViewModel = viewModel()
-    val applicationViewModel: ApplicationViewModel = viewModel()
-    var offer by remember { mutableStateOf<Offer?>(null) }
-    var showDialog by remember { mutableStateOf(false) }
+    val internshipViewModel: InternshipViewModel = viewModel()
+    val userViewModel: UserViewModel = viewModel()
 
-    val offerState by offerViewModel.offerState.collectAsState()
+    var internship by remember { mutableStateOf<Internship?>(null) }
+    var student by remember { mutableStateOf<User?>(null) }
+    var offer by remember { mutableStateOf<Offer?>(null) }
+
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
-        offerViewModel.loadOffer({ off ->
-            offer = off
-        }, offerId ?: "")
+        internshipViewModel.loadInternship({ int ->
+            internship = int
+
+            userViewModel.loadUser({ user ->
+                student = user
+            }, internship?.userId ?: "")
+
+            offerViewModel.loadOffer({ off ->
+                offer = off
+            }, internship?.offerId ?: "")
+        }, internshipId ?: "")
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(8.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)
     ) {
         FilledTonalIconButton(
-            onClick = { navController.navigate("offers") }
+            onClick = { navController.navigate("students") }
         ) {
             Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "")
         }
 
         offer?.let { offer ->
-            Column(modifier = Modifier
-                .fillMaxSize()
+            Column(modifier = Modifier.fillMaxSize()
             ) {
-
                 Text(
                     text = offer.title,
                     style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
@@ -91,37 +108,49 @@ fun CompanyOfferDetailsScreen(navController: NavController, offerId: String?) {
                     modifier = Modifier.padding(top = 4.dp, bottom = 16.dp)
                 )
 
-                Button(onClick = { showDialog = true }) {
-                    Text(stringResource(R.string.delete))
+                if (internship?.status == "not_started") {
+                    Row {
+                        Button(
+                            onClick = { // TODO : Faire les vues pour la convention de stage
+                                navController.navigate("agreement/${internship?.id}/${internship?.step}") },
+                            modifier = Modifier.padding(end = 8.dp)
+                        ) {
+                            Text(stringResource(R.string.check_the_agreement))
+                        }
+                    }
                 }
 
-                if (showDialog) {
-                    AlertDialog(
-                        onDismissRequest = { showDialog = false },
-                        confirmButton = {
-                            TextButton (
-                                onClick = {
-                                    offerViewModel.deleteOffer(offer.id)
-                                    applicationViewModel.deleteofferApplications(offer.id)
-                                    showDialog = false
-                                },
-                                enabled = offerState != DataResult.Loading
-                            ) {
-                                Text(stringResource(R.string.ok))
-                            }
-                        },
-                        dismissButton = {
-                            TextButton(onClick = { showDialog = false }) {
-                                Text(stringResource(R.string.cancel))
-                            }
-                        },
-                        title = {
-                            Text(stringResource(R.string.internship_offer))
-                        },
-                        text = {
-                            Text(stringResource(R.string.do_you_want_to_delete_that_offer))
+                Row (
+                    modifier = Modifier.padding(top = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    when (internship?.status) {
+                        "not_started" -> {
+                            Image(painterResource(R.drawable.schedule), contentDescription = "hourglass", colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary))
+                            Text(
+                                text = stringResource(R.string.the_internship_agreement_of) + student?.firstname + " " + student?.lastname + stringResource(R.string.is_in_working_progress),
+                                style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier.padding(start = 8.dp)
+                            )
                         }
-                    )
+                        "in_progress" -> {
+                            Icon(Icons.Default.Check, contentDescription = "check", tint = MaterialTheme.colorScheme.primary)
+                            Text(
+                                text = student?.firstname + " " + student?.lastname + stringResource(R.string.is_on_internship),
+                                style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier.padding(start = 8.dp)
+                            )
+                        }
+                        "finished" -> {
+                            Icon(Icons.Default.Clear, contentDescription = "clear", tint = MaterialTheme.colorScheme.primary)
+                            Text(
+                                text = student?.firstname + " " + student?.lastname + stringResource(R.string.has_finished_his_her_internship),
+                                style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier.padding(start = 8.dp)
+                            )
+                        }
+                        else -> {}
+                    }
                 }
 
                 HorizontalDivider(
@@ -165,21 +194,6 @@ fun CompanyOfferDetailsScreen(navController: NavController, offerId: String?) {
                     style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Justify),
                     modifier = Modifier.padding(top = 8.dp)
                 )
-            }
-
-            if (offerState is DataResult.Error) {
-                Spacer(modifier = Modifier.height(12.dp))
-
-                LaunchedEffect((offerState as DataResult.Error).message) {
-                    Toast.makeText(context, context.getString(R.string.error_message) + (offerState as DataResult.Error).message, Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            if (offerState == DataResult.Success) {
-                LaunchedEffect(Unit) {
-                    Toast.makeText(context, context.getString(R.string.the_offer_has_been_deleted), Toast.LENGTH_SHORT).show()
-                    navController.navigate("offers")
-                }
             }
         }
     }

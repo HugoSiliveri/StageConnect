@@ -18,7 +18,7 @@ import androidx.navigation.NavController
 import com.project.stageconnect.R
 import com.project.stageconnect.model.DataResult
 import com.project.stageconnect.model.User
-import com.project.stageconnect.viewmodel.InternshipViewModel
+import com.project.stageconnect.viewmodel.OfferViewModel
 
 /**
  * Vue de création d'une offre de stage.
@@ -35,8 +35,8 @@ fun CompanyOfferCreationScreen(currentUser: User, navController: NavController) 
     var location by remember { mutableStateOf("") }
     var duration by remember { mutableStateOf("") }
 
-    val internshipViewModel: InternshipViewModel = viewModel()
-    val internshipState by internshipViewModel.internshipState.collectAsState()
+    val offerViewModel: OfferViewModel = viewModel()
+    val offerState by offerViewModel.offerState.collectAsState()
     val context = LocalContext.current
 
     Column(
@@ -97,21 +97,21 @@ fun CompanyOfferCreationScreen(currentUser: User, navController: NavController) 
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = { internshipViewModel.createInternship(currentUser.uid, currentUser.structname, title, description, location, duration) },
-                enabled = internshipState != DataResult.Loading
+                onClick = { offerViewModel.createOffer(currentUser.uid, currentUser.structname, title, description, location, duration) },
+                enabled = offerState != DataResult.Loading
             ) {
                 Text(text = stringResource(R.string.create_offer))
             }
 
-            if (internshipState is DataResult.Error) {
+            if (offerState is DataResult.Error) {
                 Spacer(modifier = Modifier.height(12.dp))
 
-                LaunchedEffect((internshipState as DataResult.Error).message) {
-                    Toast.makeText(context, context.getString(R.string.error_message) + (internshipState as DataResult.Error).message, Toast.LENGTH_SHORT).show()
+                LaunchedEffect((offerState as DataResult.Error).message) {
+                    Toast.makeText(context, context.getString(R.string.error_message) + (offerState as DataResult.Error).message, Toast.LENGTH_SHORT).show()
                 }
             }
 
-            if (internshipState == DataResult.Success) {
+            if (offerState == DataResult.Success) {
                 LaunchedEffect(Unit) {
                     Toast.makeText(context, context.getString(R.string.offer_created_successfully) , Toast.LENGTH_SHORT).show()
                     navController.navigate("offers")

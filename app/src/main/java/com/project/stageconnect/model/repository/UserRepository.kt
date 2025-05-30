@@ -111,6 +111,29 @@ class UserRepository {
     }
 
     /**
+     * Récupère les étudiants d'un établissement spécifique.
+     *
+     * @param institutionId L'ID de l'établissement.
+     * @param onResult Callback avec la liste des étudiants.
+     *
+     * @return Un résultat indiquant si la récupération a réussi ou non.
+     */
+    fun getStudents(institutionId: String, onResult: (List<User>) -> Unit) {
+        db.collection("users").whereEqualTo("type", "intern").whereEqualTo("institutionId", institutionId).get()
+            .addOnSuccessListener { result ->
+                val students = result.mapNotNull { doc ->
+                    val student = doc.toObject(User::class.java)
+                    student.uid = doc.id
+                    student
+                    }
+                onResult(students)
+            }
+            .addOnFailureListener {
+                onResult(emptyList())
+            }
+    }
+
+    /**
      * Met à jour les informations d'un utilisateur.
      *
      * @param uid L'ID de l'utilisateur.

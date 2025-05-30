@@ -77,6 +77,7 @@ fun EducationalScreen(currentUser: User, navController: NavHostController, onLog
             composable(BottomNavItem.Account.route) { EducationalAccountScreen(currentUser, navController, onLogout) }
 
             composable("account_edition") { EducationalAccountEditionScreen(currentUser, navController, onUpdated) }
+            composable("internship_details/{internshipId}") { EducationalInternshipDetailsScreen(currentUser, navController, it.arguments?.getString("internshipId")) }
         }
     }
 }

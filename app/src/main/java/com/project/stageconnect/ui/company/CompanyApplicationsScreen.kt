@@ -32,10 +32,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.project.stageconnect.R
 import com.project.stageconnect.model.Application
-import com.project.stageconnect.model.Internship
+import com.project.stageconnect.model.Offer
 import com.project.stageconnect.model.User
 import com.project.stageconnect.viewmodel.ApplicationViewModel
-import com.project.stageconnect.viewmodel.InternshipViewModel
+import com.project.stageconnect.viewmodel.OfferViewModel
 import com.project.stageconnect.viewmodel.UserViewModel
 
 /**
@@ -52,11 +52,11 @@ fun CompanyApplicationsScreen(currentUser: User, navController: NavHostControlle
     var searchQuery by remember { mutableStateOf("") }
     var isActive by remember { mutableStateOf(false) }
 
-    val internshipViewModel: InternshipViewModel = viewModel()
+    val offerViewModel: OfferViewModel = viewModel()
     val applicationViewModel: ApplicationViewModel = viewModel()
     val userViewModel: UserViewModel = viewModel()
 
-    var offers by remember { mutableStateOf<List<Internship>>(emptyList()) }
+    var offers by remember { mutableStateOf<List<Offer>>(emptyList()) }
     var applications by remember { mutableStateOf<List<Application>>(emptyList()) }
     var users by remember { mutableStateOf<List<User>>(emptyList()) }
 
@@ -71,13 +71,13 @@ fun CompanyApplicationsScreen(currentUser: User, navController: NavHostControlle
             }, userIds)
         }, currentUser.uid)
 
-        internshipViewModel.loadCompanyInternships({ list ->
+        offerViewModel.loadCompanyOffers({ list ->
             offers = list
         }, currentUser.uid)
     }
 
     val filteredTriples = applications.mapNotNull { app ->
-        val offer = offers.find { it.id == app.internshipId }
+        val offer = offers.find { it.id == app.offerId }
         val user = users.find { it.uid == app.userId }
         if (offer != null && user != null &&
             (searchQuery.isBlank()
@@ -108,7 +108,7 @@ fun CompanyApplicationsScreen(currentUser: User, navController: NavHostControlle
             modifier = Modifier.fillMaxWidth()
         ) {}
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         if (filteredTriples.isEmpty()) {
             Column(
@@ -124,7 +124,7 @@ fun CompanyApplicationsScreen(currentUser: User, navController: NavHostControlle
             }
         } else {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
-                itemsIndexed(filteredTriples) { index, (user, internship, application) ->
+                itemsIndexed(filteredTriples) { index, (user, offer, application) ->
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -164,7 +164,7 @@ fun CompanyApplicationsScreen(currentUser: User, navController: NavHostControlle
                                         modifier = Modifier.weight(0.3f)
                                     )
                                     Text(
-                                        text = internship.title,
+                                        text = offer.title,
                                         style = MaterialTheme.typography.bodySmall,
                                         modifier = Modifier.weight(0.7f),
                                         maxLines = 1,

@@ -84,4 +84,16 @@
     <string name="you_have_denied_the_application">You have denied the application</string>
     <string name="do_you_want_to_accept_this_application">Do you want to accept this application ?</string>
     <string name="do_you_want_to_deny_this_application">Do you want to deny this application ?</string>
+    <string name="no_students_found">No students found</string>
+    <string name="not_started">Not started</string>
+    <string name="in_progress">In progress</string>
+    <string name="finished">Finished</string>
+    <string name="looking_for_an_internship">Looking for an internship</string>
+    <string name="in_training">In training</string>
+    <string name="awaiting_administrative_validation">Awaiting administrative validation</string>
+    <string name="has_finished_his_her_internship">" has finished his/her internship"</string>
+    <string name="is_on_internship">" is on internship"</string>
+    <string name="is_in_working_progress">" is in working progress"</string>
+    <string name="the_internship_agreement_of">"The internship agreement of "</string>
+    <string name="check_the_agreement">Check the agreement</string>
 </resources>

@@ -35,13 +35,13 @@ class ApplicationRepository {
      * Récupère une candidature spécifique à un utilisateur et à une offre de stage.
      *
      * @param userId L'identifiant de l'utilisateur.
-     * @param internshipId L'identifiant de l'offre de stage.
+     * @param offerId L'identifiant de l'offre de stage.
      * @param onResult Callback avec la candidature ou `null`.
      *
      * @return Un résultat indiquant si la récupération a réussi ou non.
      */
-    fun getApplicationByUserAndInternship(userId: String, internshipId: String, onResult: (Application?) -> Unit) {
-        db.collection("applications").whereEqualTo("userId", userId).whereEqualTo("internshipId", internshipId).get()
+    fun getApplicationByUserAndOffer(userId: String, offerId: String, onResult: (Application?) -> Unit) {
+        db.collection("applications").whereEqualTo("userId", userId).whereEqualTo("offerId", offerId).get()
             .addOnSuccessListener { result ->
                 val application = result.documents.firstNotNullOfOrNull { it.toObject(Application::class.java) }
                 onResult(application)
@@ -60,20 +60,20 @@ class ApplicationRepository {
      * @return Un résultat indiquant si la récupération a réussi ou non.
      **/
     fun getCompanyApplications(companyId: String, onResult: (List<Application>) -> Unit) {
-        db.collection("internships").whereEqualTo("companyId", companyId).get()
-            .addOnSuccessListener { internshipResult ->
-                val internshipIds = internshipResult.documents.mapNotNull { it.id }
-                if (internshipIds.isEmpty()) {
+        db.collection("offers").whereEqualTo("companyId", companyId).get()
+            .addOnSuccessListener { offerResult ->
+                val offerIds = offerResult.documents.mapNotNull { it.id }
+                if (offerIds.isEmpty()) {
                     onResult(emptyList())
                     return@addOnSuccessListener
                 }
 
-                val chunks = internshipIds.chunked(10)
+                val chunks = offerIds.chunked(10)
                 val allApplications = mutableListOf<Application>()
                 var completedChunks = 0
 
                 for (chunk in chunks) {
-                    db.collection("applications").whereIn("internshipId", chunk).get()
+                    db.collection("applications").whereIn("offerId", chunk).get()
                         .addOnSuccessListener { appResult ->
                             val applications = appResult.documents.mapNotNull { it.toObject(Application::class.java) }
                             allApplications.addAll(applications)
@@ -100,17 +100,17 @@ class ApplicationRepository {
      * Crée une nouvelle candidature.
      *
      * @param userId L'identifiant de l'utilisateur.
-     * @param internshipId L'identifiant de l'offre de stage.
+     * @param offerId L'identifiant de l'offre de stage.
      *
      * @return Un résultat indiquant si la création a réussi ou non.
      */
-    suspend fun createApplication(userId: String, internshipId: String): Result<Unit> {
+    suspend fun createApplication(userId: String, offerId: String): Result<Unit> {
         return try {
             val doc = db.collection("applications").document()
             val application = Application(
                 id = doc.id,
                 userId = userId,
-                internshipId = internshipId,
+                offerId = offerId,
                 status = "pending"
             )
             doc.set(application).await()
@@ -160,15 +160,15 @@ class ApplicationRepository {
      * Annule une candidature spécifique à un utilisateur et à une offre de stage.
      *
      * @param userId L'identifiant de l'utilisateur.
-     * @param internshipId L'identifiant de l'offre de stage.
+     * @param offerId L'identifiant de l'offre de stage.
      *
      * @return `Result`
      */
-    suspend fun cancelApplication(userId: String, internshipId: String): Result<Unit> {
+    suspend fun cancelApplication(userId: String, offerId: String): Result<Unit> {
         return try {
             val querySnapshot = db.collection("applications")
                 .whereEqualTo("userId", userId)
-                .whereEqualTo("internshipId", internshipId)
+                .whereEqualTo("offerId", offerId)
                 .get()
                 .await()
             for (document in querySnapshot.documents) {
@@ -183,14 +183,14 @@ class ApplicationRepository {
     /**
      * Supprime toutes les candidatures d'une offre de stage spécifique.
      *
-     * @param internshipId L'identifiant de l'offre de stage.
+     * @param offerId L'identifiant de l'offre de stage.
      *
      * @return `Result`
      */
-    suspend fun deleteInternshipApplications(internshipId: String): Result<Unit> {
+    suspend fun deleteofferApplications(offerId: String): Result<Unit> {
         return try {
             val querySnapshot = db.collection("applications")
-                .whereEqualTo("internshipId", internshipId)
+                .whereEqualTo("offerId", offerId)
                 .get()
                 .await()
             for (document in querySnapshot.documents) {

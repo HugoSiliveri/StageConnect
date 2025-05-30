@@ -42,12 +42,12 @@ class ApplicationViewModel : ViewModel() {
      *
      * @param onApplicationLoaded Callback avec la candidature chargée.
      * @param userId L'identifiant de l'utilisateur.
-     * @param internshipId L'identifiant de l'offre de stage.
+     * @param offerId L'identifiant de l'offre de stage.
      *
      * @return Un résultat indiquant si la récupération a réussi ou non.
      */
-    fun loadApplicationByUserAndInternship(onApplicationLoaded: (Application?) -> Unit, userId: String, internshipId: String) {
-        applicationRepository.getApplicationByUserAndInternship(userId, internshipId) { application ->
+    fun loadApplicationByUserAndOffer(onApplicationLoaded: (Application?) -> Unit, userId: String, offerId: String) {
+        applicationRepository.getApplicationByUserAndOffer(userId, offerId) { application ->
             onApplicationLoaded(application)
         }
     }
@@ -70,14 +70,14 @@ class ApplicationViewModel : ViewModel() {
      * Crée une nouvelle candidature pour un utilisateur et une offre de stage spécifique.
      *
      * @param userId L'identifiant de l'utilisateur.
-     * @param internshipId L'identifiant de l'offre de stage.
+     * @param offerId L'identifiant de l'offre de stage.
      *
      * @return Un résultat indiquant si la création a réussi ou non.
      */
-    fun createApplication(userId: String, internshipId: String, ) {
+    fun createApplication(userId: String, offerId: String) {
         viewModelScope.launch {
             _applicationState.value = DataResult.Loading
-            val result = applicationRepository.createApplication(userId, internshipId)
+            val result = applicationRepository.createApplication(userId, offerId)
             _applicationState.value = if (result.isSuccess) {
                 DataResult.Success
             } else {
@@ -128,14 +128,14 @@ class ApplicationViewModel : ViewModel() {
      * Annule une candidature spécifique.
      *
      * @param userId L'identifiant de l'utilisateur.
-     * @param internshipId L'identifiant de l'offre de stage.
+     * @param offerId L'identifiant de l'offre de stage.
      *
      * @return Un résultat indiquant si l'annulation a réussi ou non.
      */
-    fun cancelApplication(userId: String, internshipId: String) {
+    fun cancelApplication(userId: String, offerId: String) {
         viewModelScope.launch {
             _applicationState.value = DataResult.Loading
-            val result = applicationRepository.cancelApplication(userId, internshipId)
+            val result = applicationRepository.cancelApplication(userId, offerId)
             _applicationState.value = if (result.isSuccess) {
                 DataResult.Success
             } else {
@@ -147,14 +147,14 @@ class ApplicationViewModel : ViewModel() {
     /**
      * Supprime toutes les candidatures liées à une offre de stage spécifique.
      *
-     * @param internshipId L'identifiant de l'offre de stage.
+     * @param offerId L'identifiant de l'offre de stage.
      *
      * @return Un résultat indiquant si la suppression a réussi ou non.
      */
-    fun deleteInternshipApplications(internshipId: String) {
+    fun deleteofferApplications(offerId: String) {
         viewModelScope.launch {
             _applicationState.value = DataResult.Loading
-            val result = applicationRepository.deleteInternshipApplications(internshipId)
+            val result = applicationRepository.deleteofferApplications(offerId)
             _applicationState.value = if (result.isSuccess) {
                 DataResult.Success
             } else {
