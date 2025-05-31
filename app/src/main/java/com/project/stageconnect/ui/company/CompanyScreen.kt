@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -34,6 +35,7 @@ fun CompanyScreen(currentUser: User, navController: NavHostController, onLogout:
     val items = listOf(
         BottomNavItem.Offers,
         BottomNavItem.Applications,
+        BottomNavItem.Interns,
         BottomNavItem.Messages,
         BottomNavItem.Account
     )
@@ -59,7 +61,10 @@ fun CompanyScreen(currentUser: User, navController: NavHostController, onLogout:
                             )
                         },
                         label = {
-                            Text(stringResource(id = item.labelRes))
+                            Text(
+                                text = stringResource(id = item.labelRes),
+                                fontSize = (9.5).sp
+                            )
                         }
                     )
                 }
@@ -75,6 +80,7 @@ fun CompanyScreen(currentUser: User, navController: NavHostController, onLogout:
         ) {
             composable(BottomNavItem.Offers.route) { CompanyOffersScreen(currentUser, navController) }
             composable(BottomNavItem.Applications.route) { CompanyApplicationsScreen(currentUser, navController) }
+            composable(BottomNavItem.Interns.route) { CompanyInternsScreen(currentUser, navController) }
             composable(BottomNavItem.Messages.route) { CompanyMessagesScreen() }
             composable(BottomNavItem.Account.route) { CompanyAccountScreen(currentUser, navController, onLogout) }
 
@@ -82,6 +88,7 @@ fun CompanyScreen(currentUser: User, navController: NavHostController, onLogout:
             composable("offer_details/{offerId}") { CompanyOfferDetailsScreen(navController, it.arguments?.getString("offerId")) }
             composable("application_details/{applicationId}") { CompanyApplicationDetailsScreen(navController, it.arguments?.getString("applicationId")) }
             composable("account_edition") { CompanyAccountEditionScreen(currentUser, navController, onUpdated) }
+            composable("internship_details/{internshipId}") { CompanyInternshipDetailsScreen(navController, it.arguments?.getString("internshipId")) }
         }
     }
 }
@@ -98,6 +105,7 @@ fun CompanyScreen(currentUser: User, navController: NavHostController, onLogout:
 sealed class BottomNavItem(val route: String, val icon: Int, val labelRes: Int) {
     data object Offers : BottomNavItem("offers", R.drawable.mail, R.string.offers)
     data object Applications : BottomNavItem("applications", R.drawable.folder, R.string.applications)
+    data object Interns : BottomNavItem("interns", R.drawable.students, R.string.interns)
     data object Messages : BottomNavItem("messages", R.drawable.chat, R.string.messages)
     data object Account : BottomNavItem("account", R.drawable.person, R.string.account)
 }

@@ -1,25 +1,20 @@
 package com.project.stageconnect.ui.educational
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.project.stageconnect.R
-import com.project.stageconnect.model.DataResult
 import com.project.stageconnect.model.Internship
 import com.project.stageconnect.model.Offer
 import com.project.stageconnect.model.User
@@ -59,12 +53,12 @@ fun EducationalInternshipDetailsScreen(currentUser: User, navController: NavCont
     val offerViewModel: OfferViewModel = viewModel()
     val internshipViewModel: InternshipViewModel = viewModel()
     val userViewModel: UserViewModel = viewModel()
+    val context = LocalContext.current
 
     var internship by remember { mutableStateOf<Internship?>(null) }
     var student by remember { mutableStateOf<User?>(null) }
     var offer by remember { mutableStateOf<Offer?>(null) }
 
-    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         internshipViewModel.loadInternship({ int ->
@@ -111,11 +105,22 @@ fun EducationalInternshipDetailsScreen(currentUser: User, navController: NavCont
                 if (internship?.status == "not_started") {
                     Row {
                         Button(
-                            onClick = { // TODO : Faire les vues pour la convention de stage
-                                navController.navigate("agreement/${internship?.id}/${internship?.step}") },
+                            onClick = {
+                                navController.navigate("agreement/${internship?.id}") },
                             modifier = Modifier.padding(end = 8.dp)
                         ) {
                             Text(stringResource(R.string.check_the_agreement))
+                        }
+                    }
+                } else if (internship?.status == "in_progress") {
+                    Row {
+                        Button(
+                            onClick = {
+                                internshipViewModel.fetchAgreement({},
+                                    internship!!.id, internship!!.agreementName, context)
+                            },
+                        ) {
+                            Text(text = stringResource(R.string.download_the_agreement))
                         }
                     }
                 }

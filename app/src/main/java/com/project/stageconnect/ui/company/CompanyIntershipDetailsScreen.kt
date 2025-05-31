@@ -1,13 +1,16 @@
-package com.project.stageconnect.ui.intern
+package com.project.stageconnect.ui.company
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,23 +27,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.project.stageconnect.R
 import com.project.stageconnect.model.Internship
 import com.project.stageconnect.model.Offer
-import com.project.stageconnect.model.User
 import com.project.stageconnect.utils.Utils
 import com.project.stageconnect.viewmodel.InternshipViewModel
 import com.project.stageconnect.viewmodel.OfferViewModel
 
 /**
- * Vue d'un stage qui est associé à un étudiant.
+ * Vue des détails d'un stage qui est associé à un étudiant.
  *
- * @param currentUser L'utilisateur actuel.
+ * @param navController Le contrôleur de navigation.
+ * @param internshipId L'identifiant du stage.
  *
- * @return La vue d'un stage qui est associé à un étudiant.
+ * @return La vue des détails d'un stage qui est associé à un étudiant.
  */
 @Composable
-fun InternInternshipScreen(currentUser: User) {
+fun CompanyInternshipDetailsScreen(navController: NavHostController, internshipId: String?) {
+
     val internshipViewModel: InternshipViewModel = viewModel()
     val offerViewModel: OfferViewModel = viewModel()
     val context = LocalContext.current
@@ -49,12 +54,12 @@ fun InternInternshipScreen(currentUser: User) {
     var offer by remember { mutableStateOf<Offer?>(null) }
 
     LaunchedEffect(Unit) {
-        internshipViewModel.loadInternshipByUser({ int ->
+        internshipViewModel.loadInternship({ int ->
             internship = int
             offerViewModel.loadOffer({ off ->
                 offer = off
             }, internship?.offerId ?: "")
-        }, currentUser.uid)
+        }, internshipId ?: "")
     }
 
     Column(
@@ -62,6 +67,13 @@ fun InternInternshipScreen(currentUser: User) {
             .fillMaxSize()
             .padding(8.dp)
     ) {
+        FilledTonalIconButton(
+            onClick = {
+                navController.navigate("interns")
+            }
+        ) {
+            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "")
+        }
 
         if (internship == null) {
             Column(

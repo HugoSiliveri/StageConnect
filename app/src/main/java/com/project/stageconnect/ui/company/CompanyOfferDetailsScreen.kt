@@ -102,7 +102,7 @@ fun CompanyOfferDetailsScreen(navController: NavController, offerId: String?) {
                             TextButton (
                                 onClick = {
                                     offerViewModel.deleteOffer(offer.id)
-                                    applicationViewModel.deleteofferApplications(offer.id)
+                                    applicationViewModel.deleteOfferApplications(offer.id)
                                     showDialog = false
                                 },
                                 enabled = offerState != DataResult.Loading

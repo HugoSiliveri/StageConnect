@@ -112,6 +112,7 @@ fun CompanyOffersScreen(currentUser: User, navController: NavController) {
                     Column(
                         modifier = Modifier
                             .padding(vertical = 2.dp)
+                            .fillMaxWidth()
                             .clickable { navController.navigate("offer_details/${offer.id}") }
                     ) {
                         if (index == 0) {

@@ -187,9 +187,33 @@ class ApplicationRepository {
      *
      * @return `Result`
      */
-    suspend fun deleteofferApplications(offerId: String): Result<Unit> {
+    suspend fun deleteOfferApplications(offerId: String): Result<Unit> {
         return try {
             val querySnapshot = db.collection("applications")
+                .whereEqualTo("offerId", offerId)
+                .get()
+                .await()
+            for (document in querySnapshot.documents) {
+                db.collection("applications").document(document.id).delete().await()
+            }
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    /**
+     * Supprime une candidature spécifique à un utilisateur et à une offre de stage.
+     *
+     * @param userId L'identifiant de l'utilisateur.
+     * @param offerId L'identifiant de l'offre de stage.
+     *
+     * @return `Result`
+     */
+    suspend fun deleteApplicationByUserAndOffer(userId: String, offerId: String): Result<Unit> {
+        return try {
+            val querySnapshot = db.collection("applications")
+                .whereEqualTo("userId", userId)
                 .whereEqualTo("offerId", offerId)
                 .get()
                 .await()

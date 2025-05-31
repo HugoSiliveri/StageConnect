@@ -1,6 +1,7 @@
 package com.project.stageconnect.model.repository
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import androidx.core.content.FileProvider
 import com.google.firebase.auth.FirebaseAuth
@@ -134,6 +135,79 @@ class UserRepository {
     }
 
     /**
+     * Récupère les stagiaires d'une entreprise spécifique.
+     *
+     * @param companyId L'ID de l'entreprise.
+     * @param onResult Callback avec la liste des stagiaires.
+     *
+     * @return Un résultat indiquant si la récupération a réussi ou non.
+     */
+    fun getInterns(companyId: String, onResult: (List<User>) -> Unit) {
+        db.collection("offers").whereEqualTo("companyId", companyId).get()
+            .addOnSuccessListener { offersSnapshot ->
+                val offerIds = offersSnapshot.documents.mapNotNull { it.id }
+
+                if (offerIds.isEmpty()) {
+                    onResult(emptyList())
+                    return@addOnSuccessListener
+                }
+
+                val offerChunks = offerIds.chunked(10)
+                val internshipIds = mutableListOf<String>()
+                var remainingOfferChunks = offerChunks.size
+
+                offerChunks.forEach { chunk ->
+                    db.collection("internships").whereIn("offerId", chunk).get()
+                        .addOnSuccessListener { internshipSnapshot ->
+                            val userIds = internshipSnapshot.documents.mapNotNull { it.getString("userId") }
+                            internshipIds.addAll(userIds)
+
+                            remainingOfferChunks--
+                            if (remainingOfferChunks == 0) {
+                                if (internshipIds.isEmpty()) {
+                                    onResult(emptyList())
+                                } else {
+                                    val userChunks = internshipIds.chunked(10)
+                                    val interns = mutableListOf<User>()
+                                    var remainingUserChunks = userChunks.size
+
+                                    userChunks.forEach { userChunk ->
+                                        db.collection("users").whereEqualTo("type", "intern").whereIn(FieldPath.documentId(), userChunk).get()
+                                            .addOnSuccessListener { usersSnapshot ->
+                                                val partialUsers = usersSnapshot.documents.mapNotNull { doc ->
+                                                    doc.toObject(User::class.java)?.apply { uid = doc.id }
+                                                }
+                                                interns.addAll(partialUsers)
+
+                                                remainingUserChunks--
+                                                if (remainingUserChunks == 0) {
+                                                    onResult(interns)
+                                                }
+                                            }
+                                            .addOnFailureListener {
+                                                remainingUserChunks--
+                                                if (remainingUserChunks == 0) {
+                                                    onResult(interns)
+                                                }
+                                            }
+                                    }
+                                }
+                            }
+                        }
+                        .addOnFailureListener {
+                            remainingOfferChunks--
+                            if (remainingOfferChunks == 0) {
+                                onResult(emptyList())
+                            }
+                        }
+                }
+            }
+            .addOnFailureListener {
+                onResult(emptyList())
+            }
+    }
+
+    /**
      * Met à jour les informations d'un utilisateur.
      *
      * @param uid L'ID de l'utilisateur.
@@ -239,9 +313,9 @@ class UserRepository {
                     localFile
                 )
 
-                val intent = android.content.Intent(android.content.Intent.ACTION_VIEW).apply {
+                val intent = Intent(Intent.ACTION_VIEW).apply {
                     setDataAndType(uri, "application/pdf")
-                    addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 }
                 context.startActivity(intent)
                 onResult(Unit)

@@ -102,6 +102,21 @@ class UserViewModel : ViewModel() {
     }
 
     /**
+     * Charge les stagiaires (`intern`) de l'établissement spécifié.
+     *
+     * @param onStudentsLoaded Callback avec la liste des stagiaires.
+     * @param institutionId L'ID de l'établissement.
+     *
+     * @return Un résultat indiquant si le chargement a réussi ou non.
+     */
+    fun loadInterns(onStudentsLoaded: (List<User>) -> Unit = {}, companyId: String) {
+        userRepository.getInterns(companyId) { list ->
+            onStudentsLoaded(list)
+        }
+
+    }
+
+    /**
      * Met à jour les informations d'un utilisateur.
      *
      * @param uid L'ID de l'utilisateur.

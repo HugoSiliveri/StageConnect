@@ -41,11 +41,13 @@ import androidx.navigation.NavController
 import com.project.stageconnect.R
 import com.project.stageconnect.model.Application
 import com.project.stageconnect.model.DataResult
+import com.project.stageconnect.model.Internship
 import com.project.stageconnect.model.Offer
 import com.project.stageconnect.model.User
 import com.project.stageconnect.utils.MessagingService
 import com.project.stageconnect.utils.Utils
 import com.project.stageconnect.viewmodel.ApplicationViewModel
+import com.project.stageconnect.viewmodel.InternshipViewModel
 import com.project.stageconnect.viewmodel.OfferViewModel
 
 /**
@@ -62,8 +64,11 @@ fun InternOfferDetailsScreen(currentUser: User, navController: NavController, of
 
     val offerViewModel: OfferViewModel = viewModel()
     val applicationViewModel: ApplicationViewModel = viewModel()
+    val internshipViewModel: InternshipViewModel = viewModel()
+
     var offer by remember { mutableStateOf<Offer?>(null) }
     var application by remember { mutableStateOf<Application?>(null) }
+    var internship by remember { mutableStateOf<Internship?>(null) }
 
     var showApplyDialog by remember { mutableStateOf(false) }
     var showCancelDialog by remember { mutableStateOf(false) }
@@ -80,6 +85,10 @@ fun InternOfferDetailsScreen(currentUser: User, navController: NavController, of
         applicationViewModel.loadApplicationByUserAndOffer({ app ->
             application = app
         }, currentUser.uid, offerId ?: "")
+
+        internshipViewModel.loadInternshipByUserAndOffer({ int ->
+            internship = int
+        }, currentUser.uid, offerId ?: "")
     }
 
     Column(
@@ -88,7 +97,10 @@ fun InternOfferDetailsScreen(currentUser: User, navController: NavController, of
             .padding(8.dp)
     ) {
         FilledTonalIconButton(
-            onClick = { navController.navigate("offers") }
+            onClick = {
+                if (application == null) navController.navigate("offers")
+                else navController.navigate("applications")
+            }
         ) {
             Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "")
         }
@@ -125,7 +137,16 @@ fun InternOfferDetailsScreen(currentUser: User, navController: NavController, of
                                 Text(stringResource(R.string.cancel))
                             }
                         }
+                    } else if (application?.status == "accepted") {
+                        Row {
+                            Button(
+                                onClick = { navController.navigate("agreement/${internship?.id}") },
+                            ) {
+                                Text(stringResource(R.string.check_the_agreement))
+                            }
+                        }
                     }
+
                     Row (
                         modifier = Modifier.padding(top = 16.dp),
                         verticalAlignment = Alignment.CenterVertically

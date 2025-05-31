@@ -94,5 +94,33 @@
     <string name="is_on_internship">" is on internship"</string>
     <string name="is_in_working_progress">" is in working progress"</string>
     <string name="the_internship_agreement_of">"The internship agreement of "</string>
+    <string name="step_2_text_educational">You can download the internship agreement and decide whether to accept the internship request or not.</string>
     <string name="check_the_agreement">Check the agreement</string>
+    <string name="step_1">Step 1 - Send the internship arrangement</string>
+    <string name="step_1_text_educational">Waiting for the internship agreement to be provided by the student.</string>
+    <string name="next">Next</string>
+    <string name="step_2">Step 2 – Internship agreement verification</string>
+    <string name="download_the_agreement">Download the agreement</string>
+    <string name="step1_text_intern">You must first create your internship agreement so that it can be submitted for evaluation by your educational institution.</string>
+    <string name="step_2_text_intern">Your educational institution is responsible for verifying the validity of your internship agreement.</string>
+    <string name="internship_agreement">Internship agreement</string>
+    <string name="the_internship_agreement_has_been_validated_by_your_educational_institution">The internship agreement has been validated by your educational institution</string>
+    <string name="the_internship_agreement_has_been_refused_by_your_educational_institution">The internship agreement has been refused by your educational institution</string>
+    <string name="has_submitted_an_internship_agreement">" has submitted an internship agreement"</string>
+    <string name="step_3">Step 3 - Add signatures</string>
+    <string name="step_3_text_intern">Your internship agreement is valid. You now need to return your internship agreement with the following signatures :</string>
+    <string name="step_3_text_intern_1">From the academic supervisor</string>
+    <string name="step_3_text_intern_2">From the host organization’s mentor</string>
+    <string name="step_3_text_intern_3">From the host organization’s manager</string>
+    <string name="step_3_text_intern_4">From yourself</string>
+    <string name="step_3_text_educational">Waiting for the return of the internship agreement signed by the student.</string>
+    <string name="step_4">Step 4 – Adding the signature of the head of the institution</string>
+    <string name="step_4_text_educational">You must add the signature of the head of the institution to finalize the process.</string>
+    <string name="step_4_text_intern">The administrative office of your institution is responsible for obtaining the signature of the head of the institution.</string>
+    <string name="your_educational_institution_has_finalized_the_internship_agreement_you_can_now_start_your_internship">Your educational institution has finalized the internship agreement. You can now start your internship !</string>
+    <string name="no_internship_found">No internship found</string>
+    <string name="finalize">Finalize</string>
+    <string name="interns">Interns</string>
+    <string name="no_interns_found">No interns found</string>
+
 </resources>

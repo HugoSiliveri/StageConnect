@@ -151,10 +151,30 @@ class ApplicationViewModel : ViewModel() {
      *
      * @return Un résultat indiquant si la suppression a réussi ou non.
      */
-    fun deleteofferApplications(offerId: String) {
+    fun deleteOfferApplications(offerId: String) {
         viewModelScope.launch {
             _applicationState.value = DataResult.Loading
-            val result = applicationRepository.deleteofferApplications(offerId)
+            val result = applicationRepository.deleteOfferApplications(offerId)
+            _applicationState.value = if (result.isSuccess) {
+                DataResult.Success
+            } else {
+                DataResult.Error(result.exceptionOrNull()?.message ?: "Erreur inconnue")
+            }
+        }
+    }
+
+    /**
+     * Supprime une candidature spécifique par l'utilisateur et l'offre de stage.
+     *
+     * @param userId L'identifiant de l'utilisateur.
+     * @param offerId L'identifiant de l'offre de stage.
+     *
+     * @return Un résultat indiquant si la suppression a réussi ou non.
+     */
+    fun deleteApplicationByUserAndOffer(userId: String, offerId: String) {
+        viewModelScope.launch {
+            _applicationState.value = DataResult.Loading
+            val result = applicationRepository.deleteApplicationByUserAndOffer(userId, offerId)
             _applicationState.value = if (result.isSuccess) {
                 DataResult.Success
             } else {
