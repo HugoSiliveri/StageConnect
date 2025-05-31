@@ -44,20 +44,20 @@ class OfferViewModel : ViewModel() {
      *
      * @return Un résultat indiquant si la récupération a réussi ou non.
      */
-    fun loadNoApplicationOffers(onOffersLoaded: (List<Offer>) -> Unit, userId: String) {
-        offerRepository.getNoApplicationOffers(userId) { list ->
+    fun loadNoApplicationAndNoInternshipOffers(onOffersLoaded: (List<Offer>) -> Unit, userId: String) {
+        offerRepository.getNoApplicationAndNoInternshipOffers(userId) { list ->
             onOffersLoaded(list)
         }
     }
 
     /**
-     * Charge les offres de stage d'une entreprise spécifique.
+     * Charge les offres de stage d'une entreprise spécifique qui n'ont pas encore de stage.
      *
      * @param onOffersLoaded Callback avec la liste des offres de stage.
      * @param companyId L'identifiant de l'entreprise.
      */
-    fun loadCompanyOffers(onOffersLoaded: (List<Offer>) -> Unit, companyId: String) {
-        offerRepository.getCompanyOffers(companyId) { list ->
+    fun loadNoInternshipCompanyOffers(onOffersLoaded: (List<Offer>) -> Unit, companyId: String) {
+        offerRepository.getNoInternshipCompanyOffers(companyId) { list ->
             onOffersLoaded(list)
         }
     }

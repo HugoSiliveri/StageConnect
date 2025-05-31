@@ -38,7 +38,7 @@ import androidx.navigation.NavHostController
 import com.project.stageconnect.R
 import com.project.stageconnect.model.Internship
 import com.project.stageconnect.model.User
-import com.project.stageconnect.utils.MessagingService
+import com.project.stageconnect.utils.NotificationService
 import com.project.stageconnect.utils.Utils
 import com.project.stageconnect.viewmodel.InternshipViewModel
 
@@ -54,7 +54,7 @@ import com.project.stageconnect.viewmodel.InternshipViewModel
 @Composable
 fun InternAgreementScreen(currentUser: User, navController: NavHostController, internshipId: String?) {
     val internshipViewModel: InternshipViewModel = viewModel()
-    val messagingService = MessagingService()
+    val notificationService = NotificationService()
     val context = LocalContext.current
     val uploaded = remember { mutableStateOf(false) }
 
@@ -157,7 +157,7 @@ fun InternAgreementScreen(currentUser: User, navController: NavHostController, i
                         ) {
                             Button (
                                 onClick = {
-                                    messagingService.sendNotificationToUser(currentUser.institutionId, context.getString(R.string.internship_agreement), currentUser.firstname + " " + currentUser.lastname + context.getString(R.string.has_submitted_an_internship_agreement))
+                                    notificationService.sendNotificationToUser(currentUser.institutionId, context.getString(R.string.internship_agreement), currentUser.firstname + " " + currentUser.lastname + context.getString(R.string.has_submitted_an_internship_agreement))
                                     internshipViewModel.setStep(internship.id, 1)
                                     internshipViewModel.setAgreementName(internship.id, agreementFileName)
                                     navController.navigate("agreement/$internshipId")
@@ -258,7 +258,7 @@ fun InternAgreementScreen(currentUser: User, navController: NavHostController, i
                         ) {
                             Button (
                                 onClick = {
-                                    messagingService.sendNotificationToUser(currentUser.institutionId, context.getString(R.string.internship_agreement), currentUser.firstname + " " + currentUser.lastname + context.getString(R.string.has_submitted_an_internship_agreement))
+                                    notificationService.sendNotificationToUser(currentUser.institutionId, context.getString(R.string.internship_agreement), currentUser.firstname + " " + currentUser.lastname + context.getString(R.string.has_submitted_an_internship_agreement))
                                     internshipViewModel.setStep(internship.id, 3)
                                     internshipViewModel.setAgreementName(internship.id, agreementFileName)
                                     navController.navigate("agreement/$internshipId")

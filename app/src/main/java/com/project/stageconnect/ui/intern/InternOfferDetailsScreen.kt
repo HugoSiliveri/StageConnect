@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalIconButton
@@ -44,7 +45,7 @@ import com.project.stageconnect.model.DataResult
 import com.project.stageconnect.model.Internship
 import com.project.stageconnect.model.Offer
 import com.project.stageconnect.model.User
-import com.project.stageconnect.utils.MessagingService
+import com.project.stageconnect.utils.NotificationService
 import com.project.stageconnect.utils.Utils
 import com.project.stageconnect.viewmodel.ApplicationViewModel
 import com.project.stageconnect.viewmodel.InternshipViewModel
@@ -75,7 +76,7 @@ fun InternOfferDetailsScreen(currentUser: User, navController: NavController, of
     val applicationState by applicationViewModel.applicationState.collectAsState()
     val context = LocalContext.current
 
-    val messagingService = MessagingService()
+    val notificationService = NotificationService()
 
     LaunchedEffect(Unit) {
         offerViewModel.loadOffer({ off ->
@@ -106,23 +107,31 @@ fun InternOfferDetailsScreen(currentUser: User, navController: NavController, of
         }
 
         offer?.let { offer ->
-            Column(modifier = Modifier
-                .fillMaxSize()
-            ) {
+            Column(modifier = Modifier.fillMaxSize()) {
 
-                Text(
-                    text = offer.title,
-                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
-                    modifier = Modifier
-                        .padding(top = 16.dp)
-                )
+                Row (verticalAlignment = Alignment.CenterVertically) {
+                    Column (modifier = Modifier.weight(1f).padding(end = 8.dp)) {
+                        Text(
+                            text = offer.title,
+                            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+                            modifier = Modifier
+                                .padding(top = 16.dp)
+                        )
 
-                Text(
-                    text = "${offer.companyName} | ${Utils.extractPostalCodeAndCity(offer.location)}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = 4.dp, bottom = 16.dp)
-                )
+                        Text(
+                            text = "${offer.companyName} | ${Utils.extractPostalCodeAndCity(offer.location)}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(top = 4.dp, bottom = 16.dp)
+                        )
+                    }
+
+                    FilledTonalIconButton(
+                        onClick = { navController.navigate("chat/${offer.companyId}") }
+                    ) {
+                        Icon(painterResource(R.drawable.chat), contentDescription = "")
+                    }
+                }
 
                 if (application == null) {
                     Row {
@@ -291,11 +300,11 @@ fun InternOfferDetailsScreen(currentUser: User, navController: NavController, of
             if (applicationState == DataResult.Success) {
                 LaunchedEffect(Unit) {
                     if (application != null) {
-                        messagingService.sendNotificationToUser(offer.companyId, context.getString(R.string.application_cancelled), currentUser.firstname + " " + currentUser.lastname + context.getString(R.string.has_cancelled_his_her_application_to_the_offer) + offer.title)
+                        notificationService.sendNotificationToUser(offer.companyId, context.getString(R.string.application_cancelled), currentUser.firstname + " " + currentUser.lastname + context.getString(R.string.has_cancelled_his_her_application_to_the_offer) + offer.title)
                         Toast.makeText(context, context.getString(R.string.your_application_has_been_cancelled), Toast.LENGTH_SHORT).show()
                     }
                     else {
-                        messagingService.sendNotificationToUser(offer.companyId, context.getString(R.string.new_application), context.getString(R.string.your_received_a_new_application_to_the_offer) + offer.title)
+                        notificationService.sendNotificationToUser(offer.companyId, context.getString(R.string.new_application), context.getString(R.string.your_received_a_new_application_to_the_offer) + offer.title)
                         Toast.makeText(context, context.getString(R.string.your_application_has_been_registered), Toast.LENGTH_SHORT).show()
                     }
                     navController.navigate("offers")

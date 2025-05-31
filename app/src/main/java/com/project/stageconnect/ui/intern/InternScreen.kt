@@ -81,12 +81,14 @@ fun InternScreen(currentUser: User, navController: NavHostController, onLogout: 
             composable(BottomNavItem.Offers.route) { InternOffersScreen(currentUser, navController) }
             composable(BottomNavItem.Applications.route) { InternApplicationsScreen(currentUser, navController) }
             composable(BottomNavItem.Internship.route) { InternInternshipScreen(currentUser) }
-            composable(BottomNavItem.Messages.route) { InternMessagesScreen() }
+            composable(BottomNavItem.Messages.route) { InternMessagesScreen(currentUser, navController) }
             composable(BottomNavItem.Account.route) { InternAccountScreen(currentUser, navController, onLogout) }
 
             composable("account_edition") { InternAccountEditionScreen(currentUser, navController, onUpdated) }
             composable("offer_details/{offerId}") { InternOfferDetailsScreen(currentUser, navController, it.arguments?.getString("offerId")) }
             composable("agreement/{internshipId}") { InternAgreementScreen(currentUser, navController, it.arguments?.getString("internshipId")) }
+            composable("chat/{receiverId}") { InternChatScreen(currentUser,  it.arguments?.getString("receiverId"), navController) }
+            composable("institution_detail/{institutionId}") { InternInstitutionDetailsScreen(it.arguments?.getString("institutionId"), navController) }
         }
     }
 }

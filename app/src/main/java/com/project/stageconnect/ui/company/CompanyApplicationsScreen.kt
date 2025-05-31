@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -71,7 +72,7 @@ fun CompanyApplicationsScreen(currentUser: User, navController: NavHostControlle
             }, userIds)
         }, currentUser.uid)
 
-        offerViewModel.loadCompanyOffers({ list ->
+        offerViewModel.loadNoInternshipCompanyOffers({ list ->
             offers = list
         }, currentUser.uid)
     }
@@ -138,7 +139,7 @@ fun CompanyApplicationsScreen(currentUser: User, navController: NavHostControlle
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Column {
+                            Column (modifier = Modifier.weight(1f).padding(end = 8.dp)) {
                                 Text(
                                     "${user.firstname} ${user.lastname}",
                                     style = MaterialTheme.typography.titleMedium,
@@ -171,6 +172,12 @@ fun CompanyApplicationsScreen(currentUser: User, navController: NavHostControlle
                                         overflow = TextOverflow.Ellipsis
                                     )
                                 }
+                            }
+
+                            FilledTonalIconButton(
+                                onClick = { navController.navigate("chat/${user.uid}") }
+                            ) {
+                                Icon(painterResource(R.drawable.chat), contentDescription = "")
                             }
                         }
                         HorizontalDivider(modifier = Modifier.padding(top = 8.dp),)

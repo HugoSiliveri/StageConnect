@@ -97,14 +97,8 @@ class AuthRepository {
     suspend fun updateUserToken(): Result<Unit> {
         return try {
             val uid = auth.currentUser?.uid ?: return Result.failure(Exception("UID introuvable"))
-            FirebaseMessaging.getInstance().deleteToken().await()
-
-            val newToken = FirebaseMessaging.getInstance().token.await()
-
-            db.collection("users").document(uid)
-                .update("fcmToken", newToken)
-                .await()
-
+            val token = FirebaseMessaging.getInstance().token.await()
+            db.collection("users").document(uid).update("fcmToken", token).await()
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)

@@ -262,6 +262,10 @@ class UserRepository {
      */
     fun signOut(): Result<Unit> {
         return try {
+            val uid = auth.currentUser?.uid
+            if (uid != null) {
+                db.collection("users").document(uid).update("fcmToken", null)
+            }
             auth.signOut()
             Result.success(Unit)
         } catch (e: Exception) {

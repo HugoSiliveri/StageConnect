@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -148,11 +149,25 @@ fun InternAccountScreen(currentUser: User, navController: NavController, onLogou
                 modifier = Modifier.padding(top = 8.dp)
             )
 
-            Text(
-                text = stringResource(R.string.educational_institution) + " : ${institution?.structname}",
-                style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Justify),
-                modifier = Modifier.padding(top = 8.dp)
-            )
+            Row ( verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = stringResource(R.string.educational_institution) + " : ",
+                    style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Justify),
+                )
+
+                institution?.let { inst ->
+                    TextButton(
+                        onClick = { navController.navigate("institution_detail/${inst.uid}") },
+                        contentPadding = PaddingValues(0.dp),
+                    ) {
+                        Text(
+                            text = inst.structname,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+            }
 
 
             HorizontalDivider(

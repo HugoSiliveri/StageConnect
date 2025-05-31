@@ -20,7 +20,7 @@ import com.project.stageconnect.R
 /**
  * Service de gestion des notifications Firebase.
  */
-class MessagingService : FirebaseMessagingService() {
+class NotificationService : FirebaseMessagingService() {
 
     /**
      * Gère le cas où un nouveau token est obtenu.

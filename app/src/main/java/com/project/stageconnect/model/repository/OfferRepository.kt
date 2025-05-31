@@ -33,53 +33,76 @@ class OfferRepository {
     }
 
     /**
-     * Récupère toutes les offres de stage dont l'utilisateur n'a pas encore réalisé de candidature.
+     * Récupère toutes les offres de stage dont l'utilisateur n'a pas encore réalisé de candidature ou qui ont déjà un stage.
      *
      * @param userId L'identifiant de l'utilisateur.
      * @param onResult Callback avec la liste des offres de stage.
      *
      * @return Un résultat indiquant si la récupération a réussi ou non.
      */
-    fun getNoApplicationOffers(userId: String, onResult: (List<Offer>) -> Unit) {
+    fun getNoApplicationAndNoInternshipOffers(userId: String, onResult: (List<Offer>) -> Unit) {
         db.collection("applications").whereEqualTo("userId", userId).get()
-            .addOnSuccessListener { result ->
-                val appliedOfferIds = result.documents.mapNotNull { it.getString("offerId") }
-                if (appliedOfferIds.isEmpty()) {
-                    db.collection("offers").get()
-                        .addOnSuccessListener { offerResult ->
-                            val offers = offerResult.documents.mapNotNull { it.toObject(Offer::class.java) }
-                            onResult(offers)
-                        }
-                        .addOnFailureListener { onResult(emptyList()) }
-                } else {
-                    db.collection("offers")
-                        .whereNotIn("id", appliedOfferIds)
-                        .get()
-                        .addOnSuccessListener { offerResult ->
-                            val offers = offerResult.documents.mapNotNull { it.toObject(Offer::class.java) }
-                            onResult(offers)
-                        }
-                        .addOnFailureListener { onResult(emptyList()) }
-                }
+            .addOnSuccessListener { applicationResult ->
+                val appliedOfferIds = applicationResult.documents.mapNotNull { it.getString("offerId") }
+
+                db.collection("internships").whereEqualTo("userId", userId).get()
+                    .addOnSuccessListener { internshipResult ->
+                        val internshipOfferIds = internshipResult.documents.mapNotNull { it.getString("offerId") }
+                        val excludedOfferIds = (appliedOfferIds + internshipOfferIds).toSet()
+
+                        db.collection("offers").get()
+                            .addOnSuccessListener { offerResult ->
+                                val offers = offerResult.documents.mapNotNull { it.toObject(Offer::class.java) }
+                                val filteredOffers = offers.filter { it.id !in excludedOfferIds }
+                                onResult(filteredOffers)
+                            }
+                            .addOnFailureListener {
+                                onResult(emptyList())
+                            }
+                    }
+                    .addOnFailureListener {
+                        onResult(emptyList())
+                    }
             }
-            .addOnFailureListener { onResult(emptyList()) }
+            .addOnFailureListener {
+                onResult(emptyList())
+            }
     }
 
     /**
-     * Récupère toutes les offres de stage d'une entreprise spécifique.
+     * Récupère toutes les offres de stage d'une entreprise spécifique qui n'ont pas de stage.
      *
      * @param companyId L'identifiant de l'entreprise.
      * @param onResult Callback avec la liste des offres de stage.
      *
      * @return Un résultat indiquant si la récupération a réussi ou non.
      */
-    fun getCompanyOffers(companyId: String, onResult: (List<Offer>) -> Unit) {
+    fun getNoInternshipCompanyOffers(companyId: String, onResult: (List<Offer>) -> Unit) {
         db.collection("offers").whereEqualTo("companyId", companyId).get()
-            .addOnSuccessListener { result ->
-                val offers = result.documents.mapNotNull { it.toObject(Offer::class.java) }
-                onResult(offers)
+            .addOnSuccessListener { offerResult ->
+                val companyOffers = offerResult.documents.mapNotNull { doc ->
+                    val offer = doc.toObject(Offer::class.java)?.apply { id = doc.id }
+                    offer
+                }
+                val offerIds = companyOffers.map { it.id }
+                if (offerIds.isEmpty()) {
+                    onResult(emptyList())
+                    return@addOnSuccessListener
+                }
+
+                db.collection("internships").get()
+                    .addOnSuccessListener { internshipResult ->
+                        val internshipOfferIds = internshipResult.documents.mapNotNull { it.getString("offerId") }.toSet()
+                        val filteredOffers = companyOffers.filter { it.id !in internshipOfferIds }
+                        onResult(filteredOffers)
+                    }
+                    .addOnFailureListener {
+                        onResult(emptyList())
+                    }
             }
-            .addOnFailureListener { onResult(emptyList()) }
+            .addOnFailureListener {
+                onResult(emptyList())
+            }
     }
 
     /**

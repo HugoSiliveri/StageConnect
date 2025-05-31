@@ -19,6 +19,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.project.stageconnect.R
 import com.project.stageconnect.model.User
+import com.project.stageconnect.ui.educational.EducationalChatScreen
+import com.project.stageconnect.ui.intern.InternInstitutionDetailsScreen
 
 /**
  * Vue qui gère la navigation entre les différentes vues  de l'application pour une entreprise.
@@ -81,7 +83,7 @@ fun CompanyScreen(currentUser: User, navController: NavHostController, onLogout:
             composable(BottomNavItem.Offers.route) { CompanyOffersScreen(currentUser, navController) }
             composable(BottomNavItem.Applications.route) { CompanyApplicationsScreen(currentUser, navController) }
             composable(BottomNavItem.Interns.route) { CompanyInternsScreen(currentUser, navController) }
-            composable(BottomNavItem.Messages.route) { CompanyMessagesScreen() }
+            composable(BottomNavItem.Messages.route) { CompanyMessagesScreen(currentUser, navController) }
             composable(BottomNavItem.Account.route) { CompanyAccountScreen(currentUser, navController, onLogout) }
 
             composable("add_offer") { CompanyOfferCreationScreen(currentUser, navController) }
@@ -89,6 +91,8 @@ fun CompanyScreen(currentUser: User, navController: NavHostController, onLogout:
             composable("application_details/{applicationId}") { CompanyApplicationDetailsScreen(navController, it.arguments?.getString("applicationId")) }
             composable("account_edition") { CompanyAccountEditionScreen(currentUser, navController, onUpdated) }
             composable("internship_details/{internshipId}") { CompanyInternshipDetailsScreen(navController, it.arguments?.getString("internshipId")) }
+            composable("chat/{receiverId}") { CompanyChatScreen(currentUser,  it.arguments?.getString("receiverId"), navController) }
+            composable("institution_detail/{institutionId}") { CompanyInstitutionDetailsScreen(it.arguments?.getString("institutionId"), navController) }
         }
     }
 }

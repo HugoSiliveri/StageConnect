@@ -45,7 +45,7 @@ import com.project.stageconnect.model.Application
 import com.project.stageconnect.model.DataResult
 import com.project.stageconnect.model.Offer
 import com.project.stageconnect.model.User
-import com.project.stageconnect.utils.MessagingService
+import com.project.stageconnect.utils.NotificationService
 import com.project.stageconnect.viewmodel.ApplicationViewModel
 import com.project.stageconnect.viewmodel.InternshipViewModel
 import com.project.stageconnect.viewmodel.OfferViewModel
@@ -67,7 +67,7 @@ fun CompanyApplicationDetailsScreen(navController: NavHostController, applicatio
     val internshipViewModel: InternshipViewModel = viewModel()
     val offerViewModel: OfferViewModel = viewModel()
     val context = LocalContext.current
-    val messagingService = MessagingService()
+    val notificationService = NotificationService()
 
     var userInstitution by remember { mutableStateOf<User?>(null) }
     var application by remember { mutableStateOf<Application?>(null) }
@@ -210,12 +210,12 @@ fun CompanyApplicationDetailsScreen(navController: NavHostController, applicatio
                     if (applicationState == DataResult.Success) {
                         LaunchedEffect(Unit) {
                             if (application != null) {
-                                messagingService.sendNotificationToUser(candidate.uid, context.getString(R.string.application_accepted), context.getString(R.string.your_application_to_the_offer) + offer?.title  + context.getString(R.string.has_been_accepted))
+                                notificationService.sendNotificationToUser(candidate.uid, context.getString(R.string.application_accepted), context.getString(R.string.your_application_to_the_offer) + offer?.title  + context.getString(R.string.has_been_accepted))
                                 Toast.makeText(context, context.getString(R.string.you_have_accepted_the_application), Toast.LENGTH_SHORT).show()
 
                             }
                             else {
-                                messagingService.sendNotificationToUser(candidate.uid, context.getString(R.string.application_denied), context.getString(R.string.your_application_to_the_offer) + offer?.title  + context.getString(R.string.has_been_denied))
+                                notificationService.sendNotificationToUser(candidate.uid, context.getString(R.string.application_denied), context.getString(R.string.your_application_to_the_offer) + offer?.title  + context.getString(R.string.has_been_denied))
                                 Toast.makeText(context, context.getString(R.string.you_have_denied_the_application), Toast.LENGTH_SHORT).show()
                             }
                             navController.navigate("offers")

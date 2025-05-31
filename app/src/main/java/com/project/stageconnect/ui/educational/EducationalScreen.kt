@@ -18,7 +18,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.project.stageconnect.R
 import com.project.stageconnect.model.User
-
 /**
  * Vue qui gère la navigation entre les différentes vues de l'application pour un établissement de formation.
  *
@@ -73,11 +72,12 @@ fun EducationalScreen(currentUser: User, navController: NavHostController, onLog
                 .padding(innerPadding)
         ) {
             composable(BottomNavItem.Students.route) { EducationalStudentsScreen(currentUser, navController) }
-            composable(BottomNavItem.Messages.route) { EducationalMessagesScreen() }
+            composable(BottomNavItem.Messages.route) { EducationalMessagesScreen(currentUser, navController) }
             composable(BottomNavItem.Account.route) { EducationalAccountScreen(currentUser, navController, onLogout) }
 
             composable("account_edition") { EducationalAccountEditionScreen(currentUser, navController, onUpdated) }
             composable("internship_details/{internshipId}") { EducationalInternshipDetailsScreen(currentUser, navController, it.arguments?.getString("internshipId")) }
+            composable("chat/{receiverId}") { EducationalChatScreen(currentUser,  it.arguments?.getString("receiverId"), navController) }
             composable("agreement/{internshipId}") { EducationalAgreementScreen(currentUser, navController, it.arguments?.getString("internshipId")) }
         }
     }

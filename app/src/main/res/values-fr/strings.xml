@@ -122,5 +122,9 @@
     <string name="finalize">Finalize</string>
     <string name="interns">Interns</string>
     <string name="no_interns_found">No interns found</string>
+    <string name="send_a_message">Send a message</string>
+    <string name="new_message">New message</string>
+    <string name="no_chats_found">No chats found</string>
+    <string name="no_applications_found">No applications found</string>
 
 </resources>

@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -29,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -133,7 +135,7 @@ fun EducationalStudentsScreen(currentUser: User, navController: NavController) {
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Column {
+                            Column (modifier = Modifier.weight(1f).padding(end = 8.dp)) {
                                 Text(
                                     "${student.firstname} ${student.lastname}",
                                     style = MaterialTheme.typography.titleMedium,
@@ -159,6 +161,12 @@ fun EducationalStudentsScreen(currentUser: User, navController: NavController) {
                                         modifier = Modifier.weight(0.3f)
                                     )
                                 }
+                            }
+
+                            FilledTonalIconButton(
+                                onClick = { navController.navigate("chat/${student.uid}") }
+                            ) {
+                                Icon(painterResource(R.drawable.chat), contentDescription = "")
                             }
                         }
                         HorizontalDivider(modifier = Modifier.padding(top = 8.dp),)

@@ -57,7 +57,7 @@ fun InternOffersScreen(currentUser: User, navController: NavController) {
     var offers by remember { mutableStateOf<List<Offer>>(emptyList()) }
 
     LaunchedEffect(Unit) {
-        offerViewModel.loadNoApplicationOffers({ list ->
+        offerViewModel.loadNoApplicationAndNoInternshipOffers({ list ->
             offers = list
         }, currentUser.uid)
     }

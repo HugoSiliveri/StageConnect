@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -124,19 +126,27 @@ fun CompanyInternsScreen(currentUser: User, navController: NavHostController) {
                                     navController.navigate("internship_details/${internship.id}")
                                 }
                             }
-                            .padding(vertical = 2.dp)
+                            .padding(vertical = 2.dp),
+                        verticalArrangement = Arrangement.Center
                     ) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Text(
-                                "${intern.firstname} ${intern.lastname}",
-                                style = MaterialTheme.typography.titleMedium,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                modifier = Modifier.padding(bottom = 4.dp)
-                            )
+                            Column (modifier = Modifier.weight(1f)) {
+                                Text(
+                                    "${intern.firstname} ${intern.lastname}",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                )
+                            }
+
+                            FilledTonalIconButton(
+                                onClick = { navController.navigate("chat/${intern.uid}") }
+                            ) {
+                                Icon(painterResource(R.drawable.chat), contentDescription = "")
+                            }
                         }
                         HorizontalDivider(modifier = Modifier.padding(top = 8.dp),)
                     }

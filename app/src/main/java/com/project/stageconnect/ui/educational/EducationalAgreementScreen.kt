@@ -36,7 +36,7 @@ import androidx.navigation.NavController
 import com.project.stageconnect.R
 import com.project.stageconnect.model.Internship
 import com.project.stageconnect.model.User
-import com.project.stageconnect.utils.MessagingService
+import com.project.stageconnect.utils.NotificationService
 import com.project.stageconnect.utils.Utils
 import com.project.stageconnect.viewmodel.ApplicationViewModel
 import com.project.stageconnect.viewmodel.InternshipViewModel
@@ -55,7 +55,7 @@ import com.project.stageconnect.viewmodel.InternshipViewModel
 fun EducationalAgreementScreen(currentUser: User, navController: NavController, internshipId: String?) {
     val internshipViewModel: InternshipViewModel = viewModel()
     val applicationViewModel: ApplicationViewModel = viewModel()
-    val messagingService = MessagingService()
+    val notificationService = NotificationService()
 
     val radioOptions = listOf(R.string.accept, R.string.refuse)
     var selectedOption by remember { mutableStateOf<Int?>(null) }
@@ -200,11 +200,11 @@ fun EducationalAgreementScreen(currentUser: User, navController: NavController, 
                             Button (
                                 onClick = {
                                     if (selectedOption == R.string.accept) {
-                                        messagingService.sendNotificationToUser(internship.userId, context.getString(R.string.internship_agreement), context.getString(R.string.the_internship_agreement_has_been_validated_by_your_educational_institution))
+                                        notificationService.sendNotificationToUser(internship.userId, context.getString(R.string.internship_agreement), context.getString(R.string.the_internship_agreement_has_been_validated_by_your_educational_institution))
                                         internshipViewModel.setStep(internship.id, 2)
                                         navController.navigate("agreement/$internshipId")
                                     } else {
-                                        messagingService.sendNotificationToUser(internship.userId, context.getString(R.string.internship_agreement), context.getString(R.string.the_internship_agreement_has_been_refused_by_your_educational_institution))
+                                        notificationService.sendNotificationToUser(internship.userId, context.getString(R.string.internship_agreement), context.getString(R.string.the_internship_agreement_has_been_refused_by_your_educational_institution))
                                         internshipViewModel.setStep(internship.id, 0)
                                         navController.navigate("agreement/$internshipId")
                                     }
@@ -296,7 +296,7 @@ fun EducationalAgreementScreen(currentUser: User, navController: NavController, 
                         ) {
                             Button (
                                 onClick = {
-                                    messagingService.sendNotificationToUser(internship.userId, context.getString(R.string.internship_agreement), context.getString(R.string.your_educational_institution_has_finalized_the_internship_agreement_you_can_now_start_your_internship))
+                                    notificationService.sendNotificationToUser(internship.userId, context.getString(R.string.internship_agreement), context.getString(R.string.your_educational_institution_has_finalized_the_internship_agreement_you_can_now_start_your_internship))
                                     internshipViewModel.setStep(internship.id, 4)
                                     internshipViewModel.setAgreementName(internship.id, agreementFileName)
                                     internshipViewModel.setStatus(internship.id, "in_progress")

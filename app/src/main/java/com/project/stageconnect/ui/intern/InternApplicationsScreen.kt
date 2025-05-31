@@ -99,7 +99,7 @@ fun InternApplicationsScreen(currentUser: User, navController: NavHostController
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = stringResource(R.string.no_offers_found),
+                    text = stringResource(R.string.no_applications_found),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
