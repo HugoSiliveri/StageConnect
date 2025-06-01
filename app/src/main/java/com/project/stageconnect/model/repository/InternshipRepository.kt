@@ -85,7 +85,7 @@ class InternshipRepository {
      * @return Un résultat indiquant si la récupération a réussi ou non.
      */
     fun getInternshipByUser(userId: String, onInternshipLoaded: (Internship) -> Unit) {
-        db.collection("internships").whereEqualTo("userId", userId).get()
+        db.collection("internships").whereEqualTo("userId", userId).whereEqualTo("status", "in_progress").get()
             .addOnSuccessListener { result ->
                 val internship = result.documents.firstNotNullOfOrNull { it.toObject(Internship::class.java) }
                 if (internship != null) {

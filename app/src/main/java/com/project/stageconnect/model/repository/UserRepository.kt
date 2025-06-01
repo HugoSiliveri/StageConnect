@@ -3,6 +3,7 @@ package com.project.stageconnect.model.repository
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.core.content.FileProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldPath
@@ -104,6 +105,7 @@ class UserRepository {
                     institution.uid = doc.id
                     institution
                 }
+                Log.d("EducationalInstitutions", "Fetched institutions: $institutions")
                 onResult(institutions)
             }
             .addOnFailureListener {
@@ -157,7 +159,7 @@ class UserRepository {
                 var remainingOfferChunks = offerChunks.size
 
                 offerChunks.forEach { chunk ->
-                    db.collection("internships").whereIn("offerId", chunk).get()
+                    db.collection("internships").whereIn("offerId", chunk).whereEqualTo("status", "in_progress").get()
                         .addOnSuccessListener { internshipSnapshot ->
                             val userIds = internshipSnapshot.documents.mapNotNull { it.getString("userId") }
                             internshipIds.addAll(userIds)

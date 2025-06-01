@@ -64,9 +64,15 @@ fun CompanyMessagesScreen(currentUser: User, navController: NavController) {
                 val map = list2.associateBy { user ->
                     userIds.find { it == user.uid }
                 }
-                chatUsersMap = chats.associateWith { chat ->
-                    map[chat.userIds.find { it != currentUser.uid }] as User
-                }
+                chatUsersMap = chats.mapNotNull { chat ->
+                    val otherUserId = chat.userIds.find { it != currentUser.uid }
+                    val user = map[otherUserId]
+                    if (user != null) {
+                        chat to user
+                    } else {
+                        null
+                    }
+                }.toMap()
             }, userIds)
         }, currentUser.uid)
     }

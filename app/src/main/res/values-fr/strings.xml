@@ -91,11 +91,11 @@
     <string name="in_training">En stage</string>
     <string name="awaiting_administrative_validation">En attente de validation administrative</string>
     <string name="has_finished_his_her_internship">" a terminé son stage"</string>
-    <string name="is_on_internship">" is on internship"</string>
-    <string name="is_in_working_progress">" is in working progress"</string>
-    <string name="the_internship_agreement_of">"The internship agreement of "</string>
+    <string name="is_on_internship">" est en stage"</string>
+    <string name="is_in_working_progress">" est en cours de travail"</string>
+    <string name="the_internship_agreement_of">La convention de stage de</string>
     <string name="step_2_text_educational">Vous pouvez télécharger la convention de stage et décider d\'accepter ou non la demande de stage.</string>
-    <string name="check_the_agreement">Check the agreement</string>
+    <string name="check_the_agreement">Voir la convention</string>
     <string name="step_1">Étape 1 - Envoyer la convention de stage</string>
     <string name="step_1_text_educational">En attente de la convention de stage envoyée par l\'étudiant.</string>
     <string name="next">Suivant</string>
